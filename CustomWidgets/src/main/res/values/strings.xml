@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CustomWidgets</string>
+
+    <string name="sys_item_deleted">Eintrag wurde entfernt!</string>
+    <string name="sys_undone">Rückgängig</string>
+    <string name="sys_no_item">Kein Eintrag vorhanden</string>
+    <string name="sys_multiple">Mehrere Einträge!</string>
+</resources>

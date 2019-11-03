@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MamaPlanner</string>
+
+    <string name="main_menu_settings">Einstellungen</string>
+</resources>
