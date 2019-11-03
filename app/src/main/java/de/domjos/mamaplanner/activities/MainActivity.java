@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.mamaplanner.R;
 
-public class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
+public final class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
     private FloatingActionButton cmdMainAdd;
     private DrawerLayout drawerLayout;
 
