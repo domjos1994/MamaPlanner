@@ -39,5 +39,5 @@ dependencies {
     testImplementation "junit:junit:${junitVersion}"
     androidTestImplementation "androidx.test:runner:${junitAndroidVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
-    compile project(path: ':CustomWidgets')
+    implementation project(path: ':CustomWidgets')
 }

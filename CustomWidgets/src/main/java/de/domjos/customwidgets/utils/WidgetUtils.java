@@ -8,10 +8,14 @@ public class WidgetUtils {
 
     @SuppressWarnings("deprecation")
     public static Drawable getDrawable(Context context, int resource) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return context.getDrawable(resource);
+        if(resource == -1) {
+            return null;
         } else {
-            return context.getResources().getDrawable(resource);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                return context.getDrawable(resource);
+            } else {
+                return context.getResources().getDrawable(resource);
+            }
         }
     }
 
