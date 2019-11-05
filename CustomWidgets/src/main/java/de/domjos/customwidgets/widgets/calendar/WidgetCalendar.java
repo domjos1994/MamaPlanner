@@ -32,6 +32,7 @@ public class WidgetCalendar extends LinearLayout {
     private TableLayout tableLayout;
     private List<Map.Entry<String, Event>> events;
     private ClickListener clickListener;
+    private LongClickListener longClickListener;
     private SelectionListener selectionListener;
     private Event currentEvent;
 
@@ -68,6 +69,10 @@ public class WidgetCalendar extends LinearLayout {
 
     public void setOnClick(ClickListener clickListener) {
         this.clickListener = clickListener;
+    }
+
+    public void setOnLongClick(LongClickListener longClickListener) {
+        this.longClickListener = longClickListener;
     }
 
     public void setOnSelectionChanged(SelectionListener selectionListener) {
@@ -341,6 +346,13 @@ public class WidgetCalendar extends LinearLayout {
                     this.clickListener.onClick(event);
                 }
             });
+            layout.setOnLongClickListener(v -> {
+                this.currentEvent = event;
+                if(this.longClickListener != null) {
+                    this.longClickListener.onLongClick(this.currentEvent);
+                }
+                return false;
+            });
             linearLayout.addView(layout);
         }
         return linearLayout;
@@ -416,5 +428,9 @@ public class WidgetCalendar extends LinearLayout {
 
     public abstract static class SelectionListener {
         public abstract void onSelectionChanged(Event event);
+    }
+
+    public abstract static class LongClickListener {
+        public abstract void onLongClick(Event event);
     }
 }

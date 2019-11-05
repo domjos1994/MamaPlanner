@@ -46,7 +46,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private Spinner spAppHeaderFamily;
     private ArrayAdapter<Family> familyArrayAdapter;
 
-    public final static Global GLOBAL = new Global();
+    final static Global GLOBAL = new Global();
 
     private boolean isOpen = false;
     private final static int RELOAD_FAMILY = 99;
@@ -194,6 +194,19 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                         }
                         intent.putExtra("DT", Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat()));
                         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
+                    }
+                } catch (Exception ex) {
+                    MessageHelper.printException(ex, MainActivity.this);
+                }
+            }
+        });
+        this.calApp.setOnLongClick(new WidgetCalendar.LongClickListener() {
+            @Override
+            public void onLongClick(Event event) {
+                try {
+                    if(event instanceof CalendarEvent) {
+                        MainActivity.GLOBAL.getSqLite().deleteItem(((CalendarEvent)event));
+                        reloadEvents();
                     }
                 } catch (Exception ex) {
                     MessageHelper.printException(ex, MainActivity.this);
