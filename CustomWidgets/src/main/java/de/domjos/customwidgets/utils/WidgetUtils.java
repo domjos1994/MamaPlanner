@@ -1,8 +1,11 @@
 package de.domjos.customwidgets.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
+import java.io.InputStream;
 
 public class WidgetUtils {
 
@@ -26,5 +29,14 @@ public class WidgetUtils {
         } else {
             return context.getResources().getColor(resource);
         }
+    }
+
+    public static String getRaw(Context context, int rawID) throws Exception {
+        Resources res = context.getResources();
+        InputStream in_s = res.openRawResource(rawID);
+
+        byte[] b = new byte[in_s.available()];
+        in_s.read(b);
+        return new String(b);
     }
 }

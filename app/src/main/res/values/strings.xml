@@ -1,7 +1,37 @@
 <resources>
     <string name="app_name">MamaPlanner</string>
+
     <string name="app_event">Termin</string>
+    <string name="app_event_name">Name</string>
+    <string name="app_event_description">Beschreibung</string>
+    <string name="app_event_date">Datum</string>
+
     <string name="app_todo">ToDo</string>
 
+    <string name="app_family">Familien-Mitglieder</string>
+    <string name="app_family_all">Alle Familien-Mitglieder</string>
+    <string name="app_family_firstName">Vorname</string>
+    <string name="app_family_lastName">Nachname</string>
+    <string name="app_family_birthDate">Geburtsdatum</string>
+    <string name="app_family_gender">Geschlecht</string>
+    <string name="app_family_color">Farbe</string>
+    <string-array name="app_family_gender_items">
+        <item>Männlich</item>
+        <item>Weiblich</item>
+        <item>Divers</item>
+    </string-array>
+    <string name="app_family_picture">Bild</string>
+
     <string name="app_menu_settings">Einstellungen</string>
+
+    <string name="sys_add">Hinzufügen</string>
+    <string name="sys_edit">Bearbeiten</string>
+    <string name="sys_cancel">Abbrechen</string>
+    <string name="sys_save">Speichern</string>
+
+    <string name="validator_empty" formatted="false">Field \'%s\' is a required field!</string>
+    <string name="validator_duplicated" formatted="false">Value \'%s\' of the field \'%s\' is already in use!</string>
+    <string name="validator_matches" formatted="false">Field \'%s\' contains invalid characters!</string>
+    <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date! (yyyy-MM-dd)</string>
+    <string name="validator_no_success">"Fields are not valid!  "</string>
 </resources>

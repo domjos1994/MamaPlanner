@@ -25,12 +25,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import de.domjos.customwidgets.utils.Converter;
 
-public class ListObject {
+public class ListObject<T> {
     private byte[] icon;
     private Drawable drawable;
     private Context context;
     private String title, subTitle;
     private boolean selected;
+    private T object;
 
     public ListObject(Context context, int resID) {
         super();
@@ -90,5 +91,13 @@ public class ListObject {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public T getObject() {
+        return object;
+    }
+
+    public void setObject(T object) {
+        this.object = object;
     }
 }

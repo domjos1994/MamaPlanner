@@ -5,7 +5,8 @@ import androidx.annotation.NonNull;
 import java.util.Date;
 import java.util.Calendar;
 
-public class Event {
+public abstract class Event {
+    private long id;
     private Calendar calendar;
     private String name;
     private String description;
@@ -20,6 +21,14 @@ public class Event {
         this.name = name;
         this.description = description;
         this.color = color;
+    }
+
+    public long getId() {
+        return this.id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Calendar getCalendar() {
@@ -54,6 +63,8 @@ public class Event {
     public void setColor(int color) {
         this.color = color;
     }
+
+    public abstract int getIcon();
 
     @Override
     @NonNull

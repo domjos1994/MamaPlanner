@@ -20,6 +20,7 @@ package de.domjos.customwidgets.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -77,6 +78,14 @@ public class Converter {
         return null;
     }
 
+    public static String convertDateToString(Date date, String format) throws Exception {
+        if(date!=null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.GERMAN);
+            return simpleDateFormat.format(date);
+        }
+        return null;
+    }
+
     public static Drawable convertStringToImage(String url) {
         try {
             InputStream is = (InputStream) new URL(url).getContent();
@@ -100,6 +109,18 @@ public class Converter {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
+    }
+
+    public static Bitmap convertByteArrayToBitmap(byte[] bytes) {
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    public static byte[] convertBitmapToByteArray(Bitmap bitmap) throws Exception {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        stream.close();
+        return byteArray;
     }
 
     public static byte[] convertStreamToByteArray(InputStream stream) throws Exception {
