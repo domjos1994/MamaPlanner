@@ -23,7 +23,7 @@ ext.androidVersion = 29
 ext.androidMinVersion = 15
 ext.androidBuildVersion = "29.0.2"
 
-ext.projectVersion = 1
+ext.projectVersion = 2
 ext.projectName = "0.1.alpha.1"
 
 ext.junitVersion = "4.12"
