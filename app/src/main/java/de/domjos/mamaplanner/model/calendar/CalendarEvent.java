@@ -18,6 +18,9 @@
 
 package de.domjos.mamaplanner.model.calendar;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import de.domjos.customwidgets.widgets.calendar.Event;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.model.family.Family;
@@ -26,12 +29,14 @@ import de.domjos.mamaplanner.model.objects.IDatabaseObject;
 public final class CalendarEvent extends Event implements IDatabaseObject {
     private long ID, timeStamp;
     private Family family;
+    private List<Notification> notifications;
 
     public CalendarEvent() {
         super();
 
         this.ID = 0L;
         this.timeStamp = 0L;
+        this.notifications = new LinkedList<>();
     }
 
     @Override
@@ -70,5 +75,13 @@ public final class CalendarEvent extends Event implements IDatabaseObject {
 
     public void setFamily(Family family) {
         this.family = family;
+    }
+
+    public List<Notification> getNotifications() {
+        return this.notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 }

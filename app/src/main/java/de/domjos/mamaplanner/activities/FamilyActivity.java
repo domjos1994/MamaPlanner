@@ -310,7 +310,11 @@ public final class FamilyActivity extends AbstractActivity {
                     this.currentFamily.setGender("D");
                     break;
             }
-            this.currentFamily.setColor(((ColorDrawable) lblFamilyColor.getBackground()).getColor());
+
+
+            try {
+                this.currentFamily.setColor(((ColorDrawable) lblFamilyColor.getBackground()).getColor());
+            } catch (Exception ignored) {}
         } catch (Exception ex) {
             MessageHelper.printException(ex, FamilyActivity.this);
         }

@@ -25,17 +25,20 @@ import java.util.Calendar;
 
 public abstract class Event {
     private long id;
-    private Calendar calendar;
+    private Calendar calendar, end;
     private String name;
     private String description;
     private int color;
 
     public Event() {
-        this(new Date(), "", "", -1);
+        this(new Date(), null, "", "", -1);
     }
 
-    public Event(Date dt, String name, String description, int color) {
+    public Event(Date dt, Date end, String name, String description, int color) {
         this.setCalendar(dt);
+        if(end!=null) {
+            this.setEnd(end);
+        }
         this.name = name;
         this.description = description;
         this.color = color;
@@ -56,6 +59,19 @@ public abstract class Event {
     public void setCalendar(Date date) {
         this.calendar = Calendar.getInstance();
         this.calendar.setTime(date);
+    }
+
+    public void setEnd(Date date) {
+        if(date==null) {
+            this.end = null;
+        } else {
+            this.end = Calendar.getInstance();
+            this.end.setTime(date);
+        }
+    }
+
+    public Calendar getEnd() {
+        return this.end;
     }
 
     public String getName() {

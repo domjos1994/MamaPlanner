@@ -21,6 +21,9 @@ package de.domjos.customwidgets.widgets.calendar;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -32,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -44,15 +48,19 @@ import de.domjos.customwidgets.utils.WidgetUtils;
 public class WidgetCalendar extends LinearLayout {
     private Context context;
     private ImageButton cmdCalSkipNext, cmdCalNext, cmdCalPrevious, cmdCalSkipPrevious;
+    private ToggleButton cmdShowMonth, cmdShowDay;
     private TextView lblCalDate;
     private SimpleDateFormat dateFormat;
     private SimpleDateFormat dateFormatWithDay;
     private TableLayout tableLayout;
+    private LinearLayout llDays;
     private List<Map.Entry<String, Event>> events;
+    private Map<String, Integer> groups;
     private ClickListener clickListener;
     private LongClickListener longClickListener;
     private SelectionListener selectionListener;
     private Event currentEvent;
+    private HorizontalScrollView horizontalScrollView;
 
     public WidgetCalendar(Context context) {
         super(context);
@@ -74,6 +82,14 @@ public class WidgetCalendar extends LinearLayout {
         if(event.getCalendar() != null) {
             this.events.add(new AbstractMap.SimpleEntry<>(this.dateFormatWithDay.format(event.getCalendar().getTime()), event));
         }
+    }
+
+    public void addGroup(String name, int color) {
+        this.groups.put(name, color);
+    }
+
+    public Map<String, Integer> getGroups() {
+        return this.groups;
     }
 
     public Event getCurrentEvent() {
@@ -162,6 +178,17 @@ public class WidgetCalendar extends LinearLayout {
                 MessageHelper.printException(ex, this.context);
             }
         });
+
+        this.cmdShowMonth.setOnCheckedChangeListener((compoundButton, b) -> this.tableLayout.setVisibility(b ? VISIBLE : GONE));
+        this.cmdShowDay.setOnCheckedChangeListener((compoundButton, b) -> {
+            if(b) {
+                this.tableLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                this.llDays.setVisibility(VISIBLE);
+            } else {
+                this.tableLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                this.llDays.setVisibility(GONE);
+            }
+        });
     }
 
     private void initDefaults(Context context) {
@@ -169,15 +196,18 @@ public class WidgetCalendar extends LinearLayout {
         this.setOrientation(VERTICAL);
 
         this.events = new LinkedList<>();
+        this.groups = new LinkedHashMap<>();
     }
 
+    @SuppressWarnings("deprecation")
     private void initControls() {
         this.dateFormat = new SimpleDateFormat("MM.yyyy", Locale.getDefault());
         this.dateFormatWithDay = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
         LinearLayout linearLayout = new LinearLayout(this.context);
+        linearLayout.setBackgroundColor(WidgetUtils.getColor(this.context, R.color.colorAccent));
         linearLayout.setOrientation(HORIZONTAL);
-        linearLayout.setWeightSum(10);
+        linearLayout.setWeightSum(12);
         this.addView(linearLayout);
 
         this.cmdCalSkipPrevious = new ImageButton(this.context);
@@ -200,15 +230,36 @@ public class WidgetCalendar extends LinearLayout {
         }
         linearLayout.addView(this.cmdCalPrevious);
 
+        SpannableString content = this.getSpan(R.drawable.ic_event);
+        this.cmdShowMonth = new ToggleButton(this.context);
+        this.cmdShowMonth.setBackgroundResource(R.drawable.ic_event);
+        this.cmdShowMonth.setLayoutParams(this.getLayoutParamsByWeight(2, linearLayout));
+        this.cmdShowMonth.setGravity(Gravity.CENTER);
+        this.cmdShowMonth.setText(content);
+        this.cmdShowMonth.setTextOn(content);
+        this.cmdShowMonth.setTextOff(content);
+        this.cmdShowMonth.setChecked(true);
+        linearLayout.addView(this.cmdShowMonth);
+
         this.lblCalDate = new TextView(this.context);
         this.lblCalDate.setText(this.dateFormat.format(new Date()));
-        LayoutParams layoutParams = this.getLayoutParamsByWeight(6, linearLayout);
+        LayoutParams layoutParams = this.getLayoutParamsByWeight(4, linearLayout);
         layoutParams.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
         this.lblCalDate.setLayoutParams(layoutParams);
         this.lblCalDate.setGravity(Gravity.CENTER);
         this.lblCalDate.setTextSize(24);
         this.lblCalDate.setTypeface(null, Typeface.BOLD);
         linearLayout.addView(this.lblCalDate);
+
+        content = this.getSpan(R.drawable.ic_day);
+        this.cmdShowDay = new ToggleButton(this.context);
+        this.cmdShowDay.setBackgroundResource(R.drawable.ic_day);
+        this.cmdShowDay.setLayoutParams(this.getLayoutParamsByWeight(2, linearLayout));
+        this.cmdShowDay.setText(content);
+        this.cmdShowDay.setTextOn(content);
+        this.cmdShowDay.setTextOff(content);
+        this.cmdShowDay.setChecked(true);
+        linearLayout.addView(this.cmdShowDay);
 
         this.cmdCalNext = new ImageButton(this.context);
         this.cmdCalNext.setImageDrawable(WidgetUtils.getDrawable(this.context, R.drawable.ic_next));
@@ -237,11 +288,44 @@ public class WidgetCalendar extends LinearLayout {
         this.addView(textView);
 
         this.tableLayout = new TableLayout(this.context);
-        this.tableLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        this.tableLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         this.tableLayout.setWeightSum(7);
+        this.tableLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         this.addView(this.tableLayout);
 
+        textView = new TextView(this.context);
+        textView.setLayoutParams(tmp);
+        textView.setBackgroundColor(WidgetUtils.getColor(this.context, android.R.color.background_dark));
+        this.addView(textView);
+
+        ScrollView scrollView = new ScrollView(this.context);
+        scrollView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        scrollView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        scrollView.setHorizontalScrollBarEnabled(true);
+        scrollView.setVerticalScrollBarEnabled(true);
+        scrollView.setScrollBarStyle(SCROLLBARS_OUTSIDE_INSET);
+        scrollView.setFillViewport(true);
+        this.addView(scrollView);
+
+        this.horizontalScrollView = new HorizontalScrollView(this.context);
+        this.horizontalScrollView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        this.horizontalScrollView.setHorizontalScrollBarEnabled(true);
+        this.horizontalScrollView.setVerticalScrollBarEnabled(true);
+        scrollView.addView(this.horizontalScrollView);
+
+        this.llDays = new LinearLayout(this.context);
+        this.llDays.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        this.llDays.setOrientation(VERTICAL);
+        this.horizontalScrollView.addView(this.llDays);
+
         this.reloadCalendar();
+    }
+
+    private SpannableString getSpan(int res) {
+        ImageSpan imageSpan = new ImageSpan(this.context, res);
+        SpannableString content = new SpannableString(" ");
+        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return content;
     }
 
     private void addDaysOfWeek() {
@@ -264,10 +348,77 @@ public class WidgetCalendar extends LinearLayout {
         }
     }
 
+    private void addHours() {
+        this.llDays.removeAllViews();
+        LinearLayout linearLayout = new LinearLayout(this.context);
+        linearLayout.setOrientation(HORIZONTAL);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        linearLayout.addView(this.addTextViewWithWidth("h", 150));
+        for(int i = 1; i<=24; i++) {
+            linearLayout.addView(this.addTextViewWithWidth(String.valueOf(i), 100));
+        }
+        this.llDays.addView(linearLayout);
+
+        for(Map.Entry<String, Integer> group : this.groups.entrySet()) {
+            List<Event> dayEvents = new LinkedList<>();
+            if(this.currentEvent!=null) {
+                Calendar calendar = this.currentEvent.getCalendar();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                for(Map.Entry<String, Event> entry : this.events) {
+                    if(entry.getValue().getColor()==group.getValue()) {
+                        int year2 = entry.getValue().getCalendar().get(Calendar.YEAR);
+                        int month2 = entry.getValue().getCalendar().get(Calendar.MONTH);
+                        int day2 = entry.getValue().getCalendar().get(Calendar.DAY_OF_MONTH);
+
+                        if(year==year2 && month==month2 && day==day2) {
+                            dayEvents.add(entry.getValue());
+                        }
+                    }
+                }
+            }
+
+            List<Map.Entry<String, Integer>> entries = new LinkedList<>();
+            for(int i = 1; i<=24; i++) {
+                entries.add(new AbstractMap.SimpleEntry<>("", WidgetUtils.getColor(this.context, android.R.color.transparent)));
+            }
+            for(Event current : dayEvents) {
+                if(current.getEnd()==null) {
+                    entries.set(0, new AbstractMap.SimpleEntry<>(current.getName(), current.getColor()));
+                    for(int i = 1; i<=23; i++) {
+                        entries.get(i).setValue(current.getColor());
+                    }
+                } else {
+                    int startHour = current.getCalendar().get(Calendar.HOUR_OF_DAY);
+                    int endHour = current.getEnd().get(Calendar.HOUR_OF_DAY);
+
+                    entries.set(startHour - 1, new AbstractMap.SimpleEntry<>(current.getName(), current.getColor()));
+
+                    for(int i = startHour; i<=endHour - 1; i++) {
+                        entries.get(i).setValue(current.getColor());
+                    }
+                }
+            }
+
+            LinearLayout groupLayout = new LinearLayout(this.context);
+            groupLayout.setOrientation(HORIZONTAL);
+            groupLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            groupLayout.addView(this.addTextViewWithWidth(group.getKey(), 150, group.getValue()));
+            for(int i = 1; i<=24; i++) {
+                groupLayout.addView(this.addTextViewWithWidth(entries.get(i - 1).getKey(), 100, entries.get(i - 1).getValue()));
+            }
+            this.llDays.addView(groupLayout);
+        }
+    }
+
     private void reloadCalendar() {
         try {
             this.addRows();
             this.addDaysOfWeek();
+            this.addHours();
+            this.scrollToCurrentTime();
 
             Calendar calendar = this.getDefaultCalendar();
             int day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -294,6 +445,26 @@ public class WidgetCalendar extends LinearLayout {
         }
     }
 
+
+    private TextView addTextViewWithWidth(String text, int width, int color) {
+        TextView lbl = new TextView(this.context);
+        lbl.setText(text);
+        lbl.setGravity(Gravity.CENTER);
+        try {
+            lbl.setBackgroundColor(WidgetUtils.getColor(this.context, color));
+        } catch (Exception ex) {
+            lbl.setBackgroundColor(color);
+        }
+        lbl.setTextSize(16);
+        lbl.setTypeface(null, Typeface.BOLD);
+        lbl.setLayoutParams(new TableRow.LayoutParams(width, TableRow.LayoutParams.WRAP_CONTENT));
+        return lbl;
+    }
+
+    private TextView addTextViewWithWidth(String text, int width) {
+        return this.addTextViewWithWidth(text, width, android.R.color.transparent);
+    }
+
     private TextView addTextView(String text) {
         TextView lbl = new TextView(this.context);
         lbl.setText(text);
@@ -304,6 +475,7 @@ public class WidgetCalendar extends LinearLayout {
         return lbl;
     }
 
+    @SuppressWarnings("deprecation")
     private LinearLayout addDay(int currentDayOfMonth) {
         Calendar calendar = this.getDefaultCalendar();
         calendar.set(Calendar.DAY_OF_MONTH, currentDayOfMonth);
@@ -321,6 +493,22 @@ public class WidgetCalendar extends LinearLayout {
         linearLayout.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
         linearLayout.setPadding(5, 5, 5, 5);
         linearLayout.addView(this.addTextViewToDay(String.valueOf(currentDayOfMonth), android.R.color.transparent, -1));
+        Calendar today = Calendar.getInstance();
+        if(
+            calendar.get(Calendar.YEAR)==today.get(Calendar.YEAR) &&
+            calendar.get(Calendar.MONTH)==today.get(Calendar.MONTH) &&
+            today.get(Calendar.DAY_OF_MONTH)==currentDayOfMonth) {
+
+            linearLayout.setBackgroundColor(WidgetUtils.getColor(this.context, android.R.color.darker_gray));
+            Event event = new Event() {
+                @Override
+                public int getIcon() {
+                    return -1;
+                }
+            };
+            event.setCalendar(calendar.getTime());
+            this.currentEvent = event;
+        }
 
         linearLayout.setOnClickListener(view -> {
             for(int i = 0; i<=this.tableLayout.getChildCount() - 1; i++) {
@@ -349,6 +537,8 @@ public class WidgetCalendar extends LinearLayout {
             if(this.selectionListener!=null) {
                 this.selectionListener.onSelectionChanged(this.currentEvent);
             }
+            this.addHours();
+            this.scrollToCurrentTime();
         });
 
 
@@ -376,6 +566,7 @@ public class WidgetCalendar extends LinearLayout {
         return linearLayout;
     }
 
+    @SuppressWarnings("deprecation")
     private LinearLayout addTextViewToDay(String content, int color, int drawable) {
         LinearLayout linearLayout = new LinearLayout(this.context);
         linearLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -438,6 +629,31 @@ public class WidgetCalendar extends LinearLayout {
         }
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         return calendar;
+    }
+
+    private void scrollToCurrentTime() {
+        if(this.currentEvent!=null) {
+            Date dt = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dt);
+            int year = calendar.get(Calendar.YEAR), month = calendar.get(Calendar.MONTH), day = calendar.get(Calendar.DAY_OF_MONTH);
+            int currentYear = this.currentEvent.getCalendar().get(Calendar.YEAR), currentMonth = this.currentEvent.getCalendar().get(Calendar.MONTH);
+            int currentDay = this.currentEvent.getCalendar().get(Calendar.DAY_OF_MONTH);
+
+            if(year==currentYear && month==currentMonth && day==currentDay) {
+                int x = 150 + (100 * calendar.get(Calendar.HOUR_OF_DAY));
+
+                this.horizontalScrollView.scrollTo(x, 0);
+            }
+        } else {
+            Date dt = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dt);
+
+            int x = 150 + (100 * calendar.get(Calendar.HOUR_OF_DAY));
+
+            this.horizontalScrollView.scrollTo(x, 0);
+        }
     }
 
     public abstract static class ClickListener {

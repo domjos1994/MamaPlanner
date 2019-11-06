@@ -132,6 +132,19 @@ public class MessageHelper {
         return id;
     }
 
+    public static int showNotification(Context context, String title, String content, int icon) {
+        MessageHelper.createChannel(context);
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, id);
+        Notification notification = builder.setContentTitle(title).setContentText(content).setSmallIcon(icon).build();
+        Random random = new Random();
+        int id = random.nextInt();
+        if(manager!=null) {
+            manager.notify(id, notification);
+        }
+        return id;
+    }
+
     public static void stopProgressNotification(Activity activity, int id) {
         NotificationManager manager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
         if(manager!=null) {

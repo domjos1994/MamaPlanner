@@ -26,6 +26,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,8 +49,10 @@ import de.domjos.customwidgets.widgets.calendar.Event;
 import de.domjos.customwidgets.widgets.calendar.WidgetCalendar;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.helper.SQLite;
+import de.domjos.mamaplanner.helper.Helper;
 import de.domjos.mamaplanner.model.calendar.CalendarEvent;
 import de.domjos.mamaplanner.model.family.Family;
+import de.domjos.mamaplanner.services.NotificationService;
 import de.domjos.mamaplanner.settings.Global;
 
 public final class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,7 +67,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private Spinner spAppHeaderFamily;
     private ArrayAdapter<Family> familyArrayAdapter;
 
-    final static Global GLOBAL = new Global();
+    public final static Global GLOBAL = new Global();
 
     private boolean isOpen = false;
     private final static int RELOAD_FAMILY = 99;
@@ -155,6 +158,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
     public void initControls() {
         MainActivity.GLOBAL.setSqLite(new SQLite(this));
+        Helper.initRepeatingService(MainActivity.this, NotificationService.class, 120000);
 
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
@@ -237,10 +241,14 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     @Override
     public void reload() {
         try {
+            this.calApp.getGroups().clear();
             this.familyArrayAdapter.clear();
             this.familyArrayAdapter.add(new Family());
             for(Family family : MainActivity.GLOBAL.getSqLite().getFamily("")) {
                 this.familyArrayAdapter.add(family);
+                if(family.getColor() != -1 && family.getColor() != 0) {
+                    this.calApp.addGroup(family.getFirstName(), family.getColor());
+                }
             }
             this.spAppHeaderFamily.setSelection(0);
             this.reloadEvents();

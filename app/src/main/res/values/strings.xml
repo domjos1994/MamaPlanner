@@ -23,6 +23,11 @@
     <string name="app_event_name">Name</string>
     <string name="app_event_description">Beschreibung</string>
     <string name="app_event_date">Datum</string>
+    <string name="app_event_whole_day">Ganzer Tag</string>
+
+    <string name="notifications_months">Monate</string>
+    <string name="notifications_days">Tage</string>
+    <string name="notifications_hours">Stunden</string>
 
     <string name="app_todo">ToDo</string>
 
@@ -39,6 +44,15 @@
         <item>Divers</item>
     </string-array>
     <string name="app_family_picture">Bild</string>
+    
+    <string name="events_examinations">Vorsorge-Untersuchungen</string>
+    <string name="events_vaccinations">Impfungen</string>
+    <string name="events_vaccinations_1">Grundimmunisierung mit einem Rotaviren-Impfstoff</string>
+    <string name="events_vaccinations_2">1. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, Pneumokokken-Schutzimpfung, 2. Rotaviren-Impfung</string>
+    <string name="events_vaccinations_3">2. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, 3. Rotaviren-Impfung</string>
+    <string name="events_vaccinations_4">3. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, 2. Pneumokokken-Impfung, (3. Rotaviren-Impfung)</string>
+    <string name="events_vaccinations_5">4. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, Meningokokken, Masern, Mumps und Röteln</string>
+    <string name="events_vaccinations_6">Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, Pneumokokken-Impfung, Menigokokken-Impfdosis,  Masern-, Mumps-, Röteln-3-fach-Impfung</string>
 
     <string name="app_menu_settings">Einstellungen</string>
 

@@ -25,6 +25,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,8 +33,10 @@ import java.util.List;
 import de.domjos.customwidgets.utils.Converter;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.WidgetUtils;
+import de.domjos.customwidgets.widgets.calendar.Event;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.model.calendar.CalendarEvent;
+import de.domjos.mamaplanner.model.calendar.Notification;
 import de.domjos.mamaplanner.model.family.Family;
 import de.domjos.mamaplanner.model.objects.IDatabaseObject;
 import de.domjos.mamaplanner.settings.Global;
@@ -75,7 +78,7 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
-    public long insertOrUpdateFamily(Family family) throws Exception {
+    public void insertOrUpdateFamily(Family family) throws Exception {
         SQLiteStatement sqLiteStatement = this.getStatement(family, Arrays.asList("firstName", "lastName", "birthDate", "gender", "profilePicture", "color"));
         sqLiteStatement.bindString(1, family.getFirstName());
         sqLiteStatement.bindString(2, family.getLastName());
@@ -87,7 +90,62 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindNull(5);
         }
         sqLiteStatement.bindLong(6, family.getColor());
-        return this.execute(sqLiteStatement, family).getID();
+        family = (Family) this.execute(sqLiteStatement, family);
+
+        this.initProgrammedEvents(family);
+    }
+
+    private void initProgrammedEvents(Family family) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(family.getBirthDate());
+
+        Calendar tmpCalendar = calendar;
+        CalendarEvent calendarEvent = new CalendarEvent();
+        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
+        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_1));
+        tmpCalendar.add(Calendar.WEEK_OF_YEAR, 6);
+        calendarEvent.setCalendar(tmpCalendar.getTime());
+        this.insertOrUpdateEvent(calendarEvent, family);
+
+        tmpCalendar = calendar;
+        calendarEvent = new CalendarEvent();
+        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
+        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_2));
+        tmpCalendar.add(Calendar.MONTH, 2);
+        calendarEvent.setCalendar(tmpCalendar.getTime());
+        this.insertOrUpdateEvent(calendarEvent, family);
+
+        tmpCalendar = calendar;
+        calendarEvent = new CalendarEvent();
+        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
+        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_3));
+        tmpCalendar.add(Calendar.MONTH, 3);
+        calendarEvent.setCalendar(tmpCalendar.getTime());
+        this.insertOrUpdateEvent(calendarEvent, family);
+
+        tmpCalendar = calendar;
+        calendarEvent = new CalendarEvent();
+        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
+        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_4));
+        tmpCalendar.add(Calendar.MONTH, 4);
+        calendarEvent.setCalendar(tmpCalendar.getTime());
+        this.insertOrUpdateEvent(calendarEvent, family);
+
+        tmpCalendar = calendar;
+        calendarEvent = new CalendarEvent();
+        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
+        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_5));
+        tmpCalendar.add(Calendar.MONTH, 11);
+        calendarEvent.setCalendar(tmpCalendar.getTime());
+        this.insertOrUpdateEvent(calendarEvent, family);
+
+        tmpCalendar = calendar;
+        calendarEvent = new CalendarEvent();
+        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
+        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_6));
+        tmpCalendar.add(Calendar.MONTH, 15);
+        calendarEvent.setCalendar(tmpCalendar.getTime());
+        this.insertOrUpdateEvent(calendarEvent, family);
     }
 
     public List<Family> getFamily(String where) throws Exception {
@@ -109,8 +167,8 @@ public class SQLite extends SQLiteOpenHelper {
         return families;
     }
 
-    public long insertOrUpdateEvent(CalendarEvent event, Family family) {
-        SQLiteStatement sqLiteStatement = this.getStatement(event, Arrays.asList("name", "description", "family", "deadLine"));
+    public void insertOrUpdateEvent(CalendarEvent event, Family family) {
+        SQLiteStatement sqLiteStatement = this.getStatement(event, Arrays.asList("name", "description", "family", "start", "end"));
         sqLiteStatement.bindString(1, event.getName());
         sqLiteStatement.bindString(2, event.getDescription());
         if(family == null) {
@@ -119,7 +177,16 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindLong(3, family.getID());
         }
         sqLiteStatement.bindLong(4, event.getCalendar().getTime().getTime());
-        return this.execute(sqLiteStatement, event).getID();
+        if(event.getEnd()!=null) {
+            sqLiteStatement.bindLong(5, event.getEnd().getTime().getTime());
+        } else {
+            sqLiteStatement.bindNull(5);
+        }
+        CalendarEvent calendarEvent = (CalendarEvent) this.execute(sqLiteStatement, event);
+        this.deleteItem(new Notification(), "event=" + calendarEvent.getID());
+        for(Notification notification : calendarEvent.getNotifications()) {
+            this.insertOrUpdateNotification(notification, calendarEvent);
+        }
     }
 
     public List<CalendarEvent> getEvents(String where) throws Exception {
@@ -129,11 +196,19 @@ public class SQLite extends SQLiteOpenHelper {
             CalendarEvent calendarEvent = new CalendarEvent();
             calendarEvent.setID(cursor.getInt(cursor.getColumnIndex("ID")));
             calendarEvent.setName(cursor.getString(cursor.getColumnIndex("name")));
-            calendarEvent.setName(cursor.getString(cursor.getColumnIndex("description")));
-            long deadline = cursor.getLong(cursor.getColumnIndex("deadLine"));
+            calendarEvent.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+            long deadline = cursor.getLong(cursor.getColumnIndex("start"));
             Date date = new Date();
             date.setTime(deadline);
             calendarEvent.setCalendar(date);
+
+            long end = cursor.getLong(cursor.getColumnIndex("end"));
+            if(end != 0) {
+                Date endDate = new Date();
+                endDate.setTime(end);
+                calendarEvent.setEnd(endDate);
+            }
+
             calendarEvent.setTimeStamp(cursor.getLong(cursor.getColumnIndex("timeStamp")));
             int familyID = cursor.getInt(cursor.getColumnIndex("family"));
             if(familyID != 0) {
@@ -141,13 +216,42 @@ public class SQLite extends SQLiteOpenHelper {
                 calendarEvent.setFamily(family);
                 calendarEvent.setColor(family.getColor());
             }
+            calendarEvent.setNotifications(this.getNotifications("event=" + calendarEvent.getID()));
             events.add(calendarEvent);
         }
         return events;
     }
 
+    private void insertOrUpdateNotification(Notification notification, CalendarEvent event) {
+        SQLiteStatement sqLiteStatement = this.getStatement(notification, Arrays.asList("months", "days", "hours", "event"));
+        sqLiteStatement.bindLong(1, notification.getMonths());
+        sqLiteStatement.bindLong(2, notification.getDays());
+        sqLiteStatement.bindLong(3, notification.getHours());
+        sqLiteStatement.bindLong(4, event.getID());
+        this.execute(sqLiteStatement, notification);
+    }
+
+    public List<Notification> getNotifications(String where) {
+        List<Notification> notifications = new LinkedList<>();
+        Cursor cursor = this.getCursor(new Notification(), where);
+        while (cursor.moveToNext()) {
+            Notification notification = new Notification();
+            notification.setID(cursor.getLong(cursor.getColumnIndex("ID")));
+            notification.setMonths(cursor.getInt(cursor.getColumnIndex("months")));
+            notification.setDays(cursor.getInt(cursor.getColumnIndex("days")));
+            notification.setHours(cursor.getInt(cursor.getColumnIndex("hours")));
+            notification.setTimeStamp(cursor.getLong(cursor.getColumnIndex("timeStamp")));
+            notifications.add(notification);
+        }
+        return notifications;
+    }
+
     public void deleteItem(IDatabaseObject iDatabaseObject) {
         this.getWritableDatabase().execSQL("DELETE FROM " + iDatabaseObject.getTable() + " WHERE ID=" + iDatabaseObject.getID());
+    }
+
+    public void deleteItem(IDatabaseObject iDatabaseObject, String where) {
+        this.getWritableDatabase().execSQL("DELETE FROM " + iDatabaseObject.getTable() + " WHERE " + where);
     }
 
     private SQLiteStatement getStatement(IDatabaseObject iDatabaseObject, List<String> columns) {
