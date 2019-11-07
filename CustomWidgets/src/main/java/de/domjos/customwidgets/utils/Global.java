@@ -16,35 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.domjos.mamaplanner.settings;
-
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+package de.domjos.customwidgets.utils;
 
 import java.util.Locale;
 
-import de.domjos.mamaplanner.helper.SQLite;
-
 public class Global {
-    private SQLite sqLite;
-
-
-    public static int getVersion(Context context) {
-        try {
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return pInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException ignored) {}
-        return 0;
-    }
-
-    public static String getDateFormat() {
-        if(Global.getLocale().getLanguage().equals(Locale.GERMAN.getLanguage())) {
-            return "dd.MM.yyyy HH:mm:ss";
-        } else {
-            return "yyyy-MM-dd HH:mm:ss";
-        }
-    }
 
     public static Locale getLocale() {
         Locale locale = Locale.getDefault();
@@ -53,13 +29,5 @@ public class Global {
         } else {
             return Locale.ENGLISH;
         }
-    }
-
-    public SQLite getSqLite() {
-        return this.sqLite;
-    }
-
-    public void setSqLite(SQLite sqLite) {
-        this.sqLite = sqLite;
     }
 }

@@ -56,6 +56,10 @@ public final class EventActivity extends AbstractActivity {
 
     private Validator eventValidator;
 
+    static final String ID = "ID";
+    static final String DATE = "DT";
+    static final String FAMILY = "FAMILY";
+
     public EventActivity() {
         super(R.layout.event_activity);
     }
@@ -74,9 +78,9 @@ public final class EventActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         try {
-            long id = this.getIntent().getLongExtra("ID", 0);
-            String date = this.getIntent().getStringExtra("DT");
-            long family = this.getIntent().getLongExtra("FAMILY", 0L);
+            long id = this.getIntent().getLongExtra(EventActivity.ID, 0);
+            String date = this.getIntent().getStringExtra(EventActivity.DATE);
+            long family = this.getIntent().getLongExtra(EventActivity.FAMILY, 0L);
             if(family==0L) {
                 this.currentFamily = null;
             } else {
@@ -85,6 +89,11 @@ public final class EventActivity extends AbstractActivity {
             if(id==0L) {
                 this.event = new CalendarEvent();
                 this.event.setCalendar(Converter.convertStringToDate(date, Global.getDateFormat()));
+                if(!this.getIntent().getBooleanExtra("wholeDay", true)) {
+                    Calendar end = (Calendar) this.event.getCalendar().clone();
+                    end.add(Calendar.HOUR_OF_DAY, 1);
+                    this.event.setEnd(end.getTime());
+                }
             } else {
                 this.event = MainActivity.GLOBAL.getSqLite().getEvents("ID=" + id).get(0);
             }

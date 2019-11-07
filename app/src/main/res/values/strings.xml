@@ -25,6 +25,10 @@
     <string name="app_event_date">Datum</string>
     <string name="app_event_whole_day">Ganzer Tag</string>
 
+    <string name="app_navigation_view">Ansicht</string>
+    <string name="app_navigation_view_calendar">Monat</string>
+    <string name="app_navigation_view_day">Tag</string>
+
     <string name="notifications_months">Monate</string>
     <string name="notifications_days">Tage</string>
     <string name="notifications_hours">Stunden</string>
@@ -35,7 +39,7 @@
     <string name="app_family_all">Alle Familien-Mitglieder</string>
     <string name="app_family_firstName">Vorname</string>
     <string name="app_family_lastName">Nachname</string>
-    <string name="app_family_birthDate">Geburtsdatum</string>
+    <string name="app_family_birthDate">Geburtsdatum (%s)</string>
     <string name="app_family_gender">Geschlecht</string>
     <string name="app_family_color">Farbe</string>
     <string-array name="app_family_gender_items">

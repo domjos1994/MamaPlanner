@@ -24,16 +24,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
+import java.lang.reflect.Field;
+import java.sql.Types;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import de.domjos.customwidgets.utils.Converter;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.WidgetUtils;
-import de.domjos.customwidgets.widgets.calendar.Event;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.model.calendar.CalendarEvent;
 import de.domjos.mamaplanner.model.calendar.Notification;
@@ -73,9 +76,41 @@ public class SQLite extends SQLiteOpenHelper {
             for(String query : content.split(";")) {
                 sqLiteDatabase.execSQL(query.trim());
             }
+
+            int oldVersion = i;
+
+
+            oldVersion = this.update1(oldVersion, sqLiteDatabase);
+            this.update2(oldVersion, sqLiteDatabase);
         } catch (Exception ex) {
             MessageHelper.printException(ex, this.context);
         }
+    }
+
+    /**
+     * Update to Version 2 of Database
+     * @param version the old Version
+     * @return the updated Version
+     */
+    private int update1(int version, SQLiteDatabase db) {
+        if(version==1) {
+
+            version++;
+        }
+        return version;
+    }
+
+    /**
+     * Update to Version 3 of Database
+     * @param version the old Version
+     * @return the updated Version
+     */
+    private int update2(int version, SQLiteDatabase db) throws Exception {
+        if(version==2) {
+            this.addColumnIfNotExists(db, "events", "system", Types.TINYINT, 1, "0");
+            version++;
+        }
+        return version;
     }
 
     public void insertOrUpdateFamily(Family family) throws Exception {
@@ -90,12 +125,12 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindNull(5);
         }
         sqLiteStatement.bindLong(6, family.getColor());
-        family = (Family) this.execute(sqLiteStatement, family);
-
-        this.initProgrammedEvents(family);
+        this.execute(sqLiteStatement, family);
+        this.initSystemEvents(family);
     }
 
-    private void initProgrammedEvents(Family family) {
+    private void initSystemEvents(Family family) {
+        this.deleteItem(new CalendarEvent(), "system=1");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(family.getBirthDate());
 
@@ -105,6 +140,7 @@ public class SQLite extends SQLiteOpenHelper {
         calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_1));
         tmpCalendar.add(Calendar.WEEK_OF_YEAR, 6);
         calendarEvent.setCalendar(tmpCalendar.getTime());
+        calendarEvent.setSystem(true);
         this.insertOrUpdateEvent(calendarEvent, family);
 
         tmpCalendar = calendar;
@@ -113,6 +149,7 @@ public class SQLite extends SQLiteOpenHelper {
         calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_2));
         tmpCalendar.add(Calendar.MONTH, 2);
         calendarEvent.setCalendar(tmpCalendar.getTime());
+        calendarEvent.setSystem(true);
         this.insertOrUpdateEvent(calendarEvent, family);
 
         tmpCalendar = calendar;
@@ -121,6 +158,7 @@ public class SQLite extends SQLiteOpenHelper {
         calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_3));
         tmpCalendar.add(Calendar.MONTH, 3);
         calendarEvent.setCalendar(tmpCalendar.getTime());
+        calendarEvent.setSystem(true);
         this.insertOrUpdateEvent(calendarEvent, family);
 
         tmpCalendar = calendar;
@@ -129,6 +167,7 @@ public class SQLite extends SQLiteOpenHelper {
         calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_4));
         tmpCalendar.add(Calendar.MONTH, 4);
         calendarEvent.setCalendar(tmpCalendar.getTime());
+        calendarEvent.setSystem(true);
         this.insertOrUpdateEvent(calendarEvent, family);
 
         tmpCalendar = calendar;
@@ -137,6 +176,7 @@ public class SQLite extends SQLiteOpenHelper {
         calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_5));
         tmpCalendar.add(Calendar.MONTH, 11);
         calendarEvent.setCalendar(tmpCalendar.getTime());
+        calendarEvent.setSystem(true);
         this.insertOrUpdateEvent(calendarEvent, family);
 
         tmpCalendar = calendar;
@@ -145,6 +185,7 @@ public class SQLite extends SQLiteOpenHelper {
         calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_6));
         tmpCalendar.add(Calendar.MONTH, 15);
         calendarEvent.setCalendar(tmpCalendar.getTime());
+        calendarEvent.setSystem(true);
         this.insertOrUpdateEvent(calendarEvent, family);
     }
 
@@ -168,7 +209,7 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     public void insertOrUpdateEvent(CalendarEvent event, Family family) {
-        SQLiteStatement sqLiteStatement = this.getStatement(event, Arrays.asList("name", "description", "family", "start", "end"));
+        SQLiteStatement sqLiteStatement = this.getStatement(event, Arrays.asList("name", "description", "family", "start", "end", "system"));
         sqLiteStatement.bindString(1, event.getName());
         sqLiteStatement.bindString(2, event.getDescription());
         if(family == null) {
@@ -182,6 +223,7 @@ public class SQLite extends SQLiteOpenHelper {
         } else {
             sqLiteStatement.bindNull(5);
         }
+        sqLiteStatement.bindLong(6, event.isSystem() ? 1 : 0);
         CalendarEvent calendarEvent = (CalendarEvent) this.execute(sqLiteStatement, event);
         this.deleteItem(new Notification(), "event=" + calendarEvent.getID());
         for(Notification notification : calendarEvent.getNotifications()) {
@@ -209,6 +251,7 @@ public class SQLite extends SQLiteOpenHelper {
                 calendarEvent.setEnd(endDate);
             }
 
+            calendarEvent.setSystem(cursor.getLong(cursor.getColumnIndex("system")) == 1);
             calendarEvent.setTimeStamp(cursor.getLong(cursor.getColumnIndex("timeStamp")));
             int familyID = cursor.getInt(cursor.getColumnIndex("family"));
             if(familyID != 0) {
@@ -298,5 +341,48 @@ public class SQLite extends SQLiteOpenHelper {
         }
 
         return stringBuilder.substring(0, stringBuilder.lastIndexOf(splitter));
+    }
+
+    private void addColumnIfNotExists(SQLiteDatabase db, String table, String column, int type, int length, String defaultValue) throws Exception {
+        if(this.columnNotExists(db, table, column)) {
+            Map<Integer, String> types = this.getAllJdbcTypeNames();
+            String typeString = types.get(type);
+            if(typeString!=null) {
+                if(typeString.toLowerCase().equals("varchar")) {
+                    typeString += "(" + length + ")";
+                }
+            } else {
+                return;
+            }
+            if(!defaultValue.equals("")) {
+                typeString += " DEFAULT " + defaultValue;
+            }
+
+            db.execSQL(String.format("ALTER TABLE %s ADD COLUMN %s %s", table, column, typeString));
+        }
+    }
+
+    private boolean columnNotExists(SQLiteDatabase db, String table, String column) {
+        boolean exists = false;
+        Cursor cursor = db.rawQuery("PRAGMA table_info(" + table + ")", null);
+        while (cursor.moveToNext()) {
+            if(cursor.getString(1).equals(column)) {
+                exists = true;
+                break;
+            }
+        }
+        cursor.close();
+        return !exists;
+    }
+
+    private Map<Integer, String> getAllJdbcTypeNames() throws  Exception {
+
+        Map<Integer, String> result = new LinkedHashMap<>();
+
+        for (Field field : Types.class.getFields()) {
+            result.put(field.getInt(null), field.getName());
+        }
+
+        return result;
     }
 }

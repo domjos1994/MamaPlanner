@@ -18,6 +18,7 @@
 
 package de.domjos.mamaplanner.activities;
 
+import android.widget.*;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -25,21 +26,15 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.Date;
+import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.Converter;
@@ -77,6 +72,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         super(R.layout.main_activity);
     }
 
+    @SuppressWarnings("deprecation")
     public void initActions() {
         this.fabAppAdd.setOnClickListener(view -> {
             this.showAnimation(this.lblAppEvent, this.fabAppEvent);
@@ -112,18 +108,6 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             }
         });
 
-        this.ivAppHeaderProfile.setOnClickListener(view -> {
-            long id = 0;
-            if(this.spAppHeaderFamily.getSelectedItem()!=null) {
-                Family family = (Family) this.spAppHeaderFamily.getSelectedItem();
-                id = family.getID();
-            }
-
-            Intent intent = new Intent(MainActivity.this, FamilyActivity.class);
-            intent.putExtra("id", id);
-            this.startActivityForResult(intent, MainActivity.RELOAD_FAMILY);
-        });
-
         this.spAppHeaderFamily.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -133,6 +117,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     if(family.getID() == 0L && family.getProfilePicture()==null) {
                         ivAppHeaderProfile.setImageDrawable(WidgetUtils.getDrawable(MainActivity.this, R.mipmap.ic_launcher_round));
                         lblAppHeaderName.setText(R.string.app_family_all);
+                        lblAppHeaderName.setTextColor(getResources().getColor(R.color.colorPrimary));
                     } else if(family.getProfilePicture() == null) {
                         String name = family.getFirstName() + " " + family.getLastName();
                         lblAppHeaderName.setText(name);
@@ -182,6 +167,21 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         NavigationView navigationView = this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        MenuItem itemMonth = navigationView.getMenu().findItem(R.id.navAppViewMonth);
+        Switch swtMonth = (Switch) itemMonth.getActionView();
+        swtMonth.setChecked(true);
+        swtMonth.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            itemMonth.setChecked(isChecked);
+            this.calApp.showMonth(isChecked);
+        });
+        MenuItem itemDay = navigationView.getMenu().findItem(R.id.navAppViewDay);
+        Switch swtDay = (Switch) itemDay.getActionView();
+        swtDay.setChecked(true);
+        swtDay.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            itemDay.setChecked(isChecked);
+            this.calApp.showDay(isChecked);
+        });
+
         this.ivAppHeaderProfile = navigationView.getHeaderView(0).findViewById(R.id.ivAppProfilePicture);
         this.lblAppHeaderName = navigationView.getHeaderView(0).findViewById(R.id.lblAppFamilyName);
         this.spAppHeaderFamily = navigationView.getHeaderView(0).findViewById(R.id.spAppFamily);
@@ -195,26 +195,45 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             public void onClick(Event event) {
                 try {
                     if(event instanceof CalendarEvent) {
+                        MainActivity.this.startEventActivity(event, null, true);
+                    }
+                } catch (Exception ex) {
+                    MessageHelper.printException(ex, MainActivity.this);
+                }
+            }
+        });
+        this.calApp.setOnLongClick(new WidgetCalendar.ClickListener() {
+            @Override
+            public void onClick(Event event) {
+                try {
+                    if(event instanceof CalendarEvent) {
+                        if(!((CalendarEvent) event).isSystem()) {
+                            MainActivity.GLOBAL.getSqLite().deleteItem(((CalendarEvent) event));
+                            reloadEvents();
+                        }
+                    }
+                } catch (Exception ex) {
+                    MessageHelper.printException(ex, MainActivity.this);
+                }
+            }
+        });
+        this.calApp.setOnHourHeaderClick(new WidgetCalendar.ClickListener() {
+            @Override
+            public void onClick(Event event) {
+                try {
+                    if(event instanceof CalendarEvent) {
+                        MainActivity.this.startEventActivity(event, null, false);
+                    } else {
                         Intent intent = new Intent(getApplicationContext(), EventActivity.class);
-                        intent.putExtra("ID", ((CalendarEvent) event).getID());
+                        intent.putExtra("ID", 0);
                         Family family = (Family) spAppHeaderFamily.getSelectedItem();
                         if(family!=null) {
                             intent.putExtra("FAMILY", family.getID());
-                            if(family.getID() == 0) {
-                                if (((CalendarEvent) event).getFamily() != null) {
-                                    intent.putExtra("FAMILY", ((CalendarEvent) event).getFamily().getID());
-                                } else {
-                                    intent.putExtra("FAMILY", 0);
-                                }
-                            }
                         } else {
-                            if (((CalendarEvent) event).getFamily() != null) {
-                                intent.putExtra("FAMILY", ((CalendarEvent) event).getFamily().getID());
-                            } else {
-                                intent.putExtra("FAMILY", 0);
-                            }
+                            intent.putExtra("FAMILY", 0);
                         }
                         intent.putExtra("DT", Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat()));
+                        intent.putExtra("wholeDay", false);
                         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                     }
                 } catch (Exception ex) {
@@ -222,13 +241,35 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 }
             }
         });
-        this.calApp.setOnLongClick(new WidgetCalendar.LongClickListener() {
+        this.calApp.setOnHourGroupClick(new WidgetCalendar.ClickListener() {
             @Override
-            public void onLongClick(Event event) {
+            public void onClick(Event event) {
                 try {
-                    if(event instanceof CalendarEvent) {
-                        MainActivity.GLOBAL.getSqLite().deleteItem(((CalendarEvent)event));
-                        reloadEvents();
+                    if(event instanceof  CalendarEvent) {
+                        List<Family> familyList = MainActivity.GLOBAL.getSqLite().getFamily("color=" + event.getColor());
+                        if(familyList.size()>=1) {
+                            MainActivity.this.startEventActivity(event, familyList.get(0), false);
+                        } else {
+                            MainActivity.this.startEventActivity(event, null, false);
+                        }
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), EventActivity.class);
+                        intent.putExtra("ID", 0);
+                        Family family;
+                        List<Family> familyList = MainActivity.GLOBAL.getSqLite().getFamily("color=" + event.getColor());
+                        if(familyList.size()>=1) {
+                            family = familyList.get(0);
+                        } else {
+                            family = (Family) spAppHeaderFamily.getSelectedItem();
+                        }
+                        if(family!=null) {
+                            intent.putExtra("FAMILY", family.getID());
+                        } else {
+                            intent.putExtra("FAMILY", 0);
+                        }
+                        intent.putExtra("DT", Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat()));
+                        intent.putExtra("wholeDay", false);
+                        startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                     }
                 } catch (Exception ex) {
                     MessageHelper.printException(ex, MainActivity.this);
@@ -244,6 +285,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             this.calApp.getGroups().clear();
             this.familyArrayAdapter.clear();
             this.familyArrayAdapter.add(new Family());
+            this.calApp.addGroup(this.getString(R.string.app_family_all).split(" ")[0], android.R.color.transparent);
             for(Family family : MainActivity.GLOBAL.getSqLite().getFamily("")) {
                 this.familyArrayAdapter.add(family);
                 if(family.getColor() != -1 && family.getColor() != 0) {
@@ -252,21 +294,6 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             }
             this.spAppHeaderFamily.setSelection(0);
             this.reloadEvents();
-        } catch (Exception ex) {
-            MessageHelper.printException(ex, MainActivity.this);
-        }
-    }
-
-    private void reloadEvents() {
-        try {
-            this.calApp.getEvents().clear();
-            long id = ((Family) this.spAppHeaderFamily.getSelectedItem()).getID();
-            String query = id==0L ? "" : "family=" + id;
-
-            for(CalendarEvent calendarEvent : MainActivity.GLOBAL.getSqLite().getEvents(query)) {
-                this.calApp.addEvent(calendarEvent);
-            }
-            this.calApp.reload();
         } catch (Exception ex) {
             MessageHelper.printException(ex, MainActivity.this);
         }
@@ -298,6 +325,13 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.navAppFamily) {
+            Intent intent = new Intent(MainActivity.this, FamilyActivity.class);
+            this.startActivityForResult(intent, MainActivity.RELOAD_FAMILY);
+        }
+
         this.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -314,6 +348,33 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         }
     }
 
+    private void startEventActivity(Event event, Family family, boolean wholeDay) throws Exception {
+        Intent intent = new Intent(getApplicationContext(), EventActivity.class);
+        intent.putExtra(EventActivity.ID, ((CalendarEvent) event).getID());
+        if(family == null) {
+            family = (Family) spAppHeaderFamily.getSelectedItem();
+        }
+        if(family!=null) {
+            intent.putExtra(EventActivity.FAMILY, family.getID());
+            if(family.getID() == 0) {
+                if (((CalendarEvent) event).getFamily() != null) {
+                    intent.putExtra(EventActivity.FAMILY, ((CalendarEvent) event).getFamily().getID());
+                } else {
+                    intent.putExtra(EventActivity.FAMILY, 0);
+                }
+            }
+        } else {
+            if (((CalendarEvent) event).getFamily() != null) {
+                intent.putExtra(EventActivity.FAMILY, ((CalendarEvent) event).getFamily().getID());
+            } else {
+                intent.putExtra(EventActivity.FAMILY, 0);
+            }
+        }
+        intent.putExtra(EventActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat()));
+        intent.putExtra("wholeDay", wholeDay);
+        startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
+    }
+
     private void showAnimation(TextView lbl, FloatingActionButton fab) {
         if(this.isOpen) {
             lbl.setVisibility(View.INVISIBLE);
@@ -323,6 +384,29 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             lbl.setVisibility(View.VISIBLE);
             fab.startAnimation(this.fabOpen);
             fab.setClickable(true);
+        }
+    }
+
+    private void reloadEvents() {
+        try {
+            this.calApp.getEvents().clear();
+            long id = ((Family) this.spAppHeaderFamily.getSelectedItem()).getID();
+            String query = id==0L ? "" : "family=" + id;
+
+            for(CalendarEvent calendarEvent : MainActivity.GLOBAL.getSqLite().getEvents(query)) {
+                if(calendarEvent.getFamily()==null) {
+                    Family family = new Family();
+                    family.setColor(android.R.color.transparent);
+                    calendarEvent.setFamily(family);
+                }
+                if(calendarEvent.getColor()==-1) {
+                    calendarEvent.setColor(android.R.color.transparent);
+                }
+                this.calApp.addEvent(calendarEvent);
+            }
+            this.calApp.reload();
+        } catch (Exception ex) {
+            MessageHelper.printException(ex, MainActivity.this);
         }
     }
 }

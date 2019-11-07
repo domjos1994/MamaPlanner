@@ -23,24 +23,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.FamilyActivity">
+    tools:context=".activities.FamilyActivity"
+    android:background="@color/colorAccent">
 
     <de.domjos.customwidgets.widgets.swiperefreshlist.SwipeRefreshDeleteList
         android:id="@+id/lvFamily"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_above="@+id/tblControls"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:padding="5dp"/>
 
     <ScrollView
         android:id="@+id/tblControls"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_above="@+id/navigation">
+        android:layout_above="@+id/navigation"
+        android:background="@color/colorPrimaryDark">
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="10">
+            <TextView
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"/>
             <TableRow>
                 <EditText
                     android:id="@+id/txtFamilyFirstName"

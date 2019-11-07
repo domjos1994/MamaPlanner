@@ -30,6 +30,7 @@ public final class CalendarEvent extends Event implements IDatabaseObject {
     private long ID, timeStamp;
     private Family family;
     private List<Notification> notifications;
+    private boolean system;
 
     public CalendarEvent() {
         super();
@@ -37,6 +38,7 @@ public final class CalendarEvent extends Event implements IDatabaseObject {
         this.ID = 0L;
         this.timeStamp = 0L;
         this.notifications = new LinkedList<>();
+        this.system = false;
     }
 
     @Override
@@ -83,5 +85,13 @@ public final class CalendarEvent extends Event implements IDatabaseObject {
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    public boolean isSystem() {
+        return this.system;
+    }
+
+    public void setSystem(boolean system) {
+        this.system = system;
     }
 }

@@ -18,7 +18,28 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
       tools:showIn="navigation_view">
 
+    <item
+        android:id="@+id/navAppFamily"
+        android:title="@string/app_family"
+        android:icon="@drawable/ic_family"/>
+
+    <item android:title="@string/app_navigation_view">
+        <menu>
+            <item
+                android:id="@+id/navAppViewMonth"
+                android:title="@string/app_navigation_view_calendar"
+                android:checkable="true"
+                android:checked="true"
+                app:actionViewClass="android.widget.Switch"/>
+            <item
+                android:id="@+id/navAppViewDay"
+                android:title="@string/app_navigation_view_day"
+                android:checkable="true"
+                android:checked="true"
+                app:actionViewClass="android.widget.Switch"/>
+        </menu>
+    </item>
 </menu>

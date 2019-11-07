@@ -20,8 +20,10 @@ package de.domjos.customwidgets.widgets.calendar;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
@@ -42,13 +44,13 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.domjos.customwidgets.R;
+import de.domjos.customwidgets.utils.Global;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.WidgetUtils;
 
 public class WidgetCalendar extends LinearLayout {
     private Context context;
     private ImageButton cmdCalSkipNext, cmdCalNext, cmdCalPrevious, cmdCalSkipPrevious;
-    private ToggleButton cmdShowMonth, cmdShowDay;
     private TextView lblCalDate;
     private SimpleDateFormat dateFormat;
     private SimpleDateFormat dateFormatWithDay;
@@ -57,8 +59,9 @@ public class WidgetCalendar extends LinearLayout {
     private List<Map.Entry<String, Event>> events;
     private Map<String, Integer> groups;
     private ClickListener clickListener;
-    private LongClickListener longClickListener;
-    private SelectionListener selectionListener;
+    private ClickListener hourHeaderClickListener;
+    private ClickListener longClickListener;
+    private ClickListener hourGroupListener;
     private Event currentEvent;
     private HorizontalScrollView horizontalScrollView;
 
@@ -105,12 +108,30 @@ public class WidgetCalendar extends LinearLayout {
         this.clickListener = clickListener;
     }
 
-    public void setOnLongClick(LongClickListener longClickListener) {
+    public void setOnHourHeaderClick(ClickListener clickListener) {
+        this.hourHeaderClickListener = clickListener;
+    }
+
+    public void setOnHourGroupClick(ClickListener clickListener) {
+        this.hourGroupListener = clickListener;
+    }
+
+    public void setOnLongClick(ClickListener longClickListener) {
         this.longClickListener = longClickListener;
     }
 
-    public void setOnSelectionChanged(SelectionListener selectionListener) {
-        this.selectionListener = selectionListener;
+    public void showMonth(boolean month) {
+        this.tableLayout.setVisibility(month ? VISIBLE : GONE);
+    }
+
+    public void showDay(boolean day) {
+        if(day) {
+            this.tableLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            this.llDays.setVisibility(VISIBLE);
+        } else {
+            this.tableLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            this.llDays.setVisibility(GONE);
+        }
     }
 
     public void reload() {
@@ -178,17 +199,6 @@ public class WidgetCalendar extends LinearLayout {
                 MessageHelper.printException(ex, this.context);
             }
         });
-
-        this.cmdShowMonth.setOnCheckedChangeListener((compoundButton, b) -> this.tableLayout.setVisibility(b ? VISIBLE : GONE));
-        this.cmdShowDay.setOnCheckedChangeListener((compoundButton, b) -> {
-            if(b) {
-                this.tableLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                this.llDays.setVisibility(VISIBLE);
-            } else {
-                this.tableLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                this.llDays.setVisibility(GONE);
-            }
-        });
     }
 
     private void initDefaults(Context context) {
@@ -201,13 +211,13 @@ public class WidgetCalendar extends LinearLayout {
 
     @SuppressWarnings("deprecation")
     private void initControls() {
-        this.dateFormat = new SimpleDateFormat("MM.yyyy", Locale.getDefault());
-        this.dateFormatWithDay = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        this.dateFormat = new SimpleDateFormat("MM.yyyy", Global.getLocale());
+        this.dateFormatWithDay = new SimpleDateFormat("dd.MM.yyyy", Global.getLocale());
 
         LinearLayout linearLayout = new LinearLayout(this.context);
         linearLayout.setBackgroundColor(WidgetUtils.getColor(this.context, R.color.colorAccent));
         linearLayout.setOrientation(HORIZONTAL);
-        linearLayout.setWeightSum(12);
+        linearLayout.setWeightSum(8);
         this.addView(linearLayout);
 
         this.cmdCalSkipPrevious = new ImageButton(this.context);
@@ -230,17 +240,6 @@ public class WidgetCalendar extends LinearLayout {
         }
         linearLayout.addView(this.cmdCalPrevious);
 
-        SpannableString content = this.getSpan(R.drawable.ic_event);
-        this.cmdShowMonth = new ToggleButton(this.context);
-        this.cmdShowMonth.setBackgroundResource(R.drawable.ic_event);
-        this.cmdShowMonth.setLayoutParams(this.getLayoutParamsByWeight(2, linearLayout));
-        this.cmdShowMonth.setGravity(Gravity.CENTER);
-        this.cmdShowMonth.setText(content);
-        this.cmdShowMonth.setTextOn(content);
-        this.cmdShowMonth.setTextOff(content);
-        this.cmdShowMonth.setChecked(true);
-        linearLayout.addView(this.cmdShowMonth);
-
         this.lblCalDate = new TextView(this.context);
         this.lblCalDate.setText(this.dateFormat.format(new Date()));
         LayoutParams layoutParams = this.getLayoutParamsByWeight(4, linearLayout);
@@ -250,16 +249,6 @@ public class WidgetCalendar extends LinearLayout {
         this.lblCalDate.setTextSize(24);
         this.lblCalDate.setTypeface(null, Typeface.BOLD);
         linearLayout.addView(this.lblCalDate);
-
-        content = this.getSpan(R.drawable.ic_day);
-        this.cmdShowDay = new ToggleButton(this.context);
-        this.cmdShowDay.setBackgroundResource(R.drawable.ic_day);
-        this.cmdShowDay.setLayoutParams(this.getLayoutParamsByWeight(2, linearLayout));
-        this.cmdShowDay.setText(content);
-        this.cmdShowDay.setTextOn(content);
-        this.cmdShowDay.setTextOff(content);
-        this.cmdShowDay.setChecked(true);
-        linearLayout.addView(this.cmdShowDay);
 
         this.cmdCalNext = new ImageButton(this.context);
         this.cmdCalNext.setImageDrawable(WidgetUtils.getDrawable(this.context, R.drawable.ic_next));
@@ -329,7 +318,7 @@ public class WidgetCalendar extends LinearLayout {
     }
 
     private void addDaysOfWeek() {
-        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(Locale.getDefault());
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(Global.getLocale());
         for(String dayOfWeek : dateFormatSymbols.getWeekdays()) {
             if(dayOfWeek.length()>=3) {
                 ((TableRow) this.tableLayout.getChildAt(0)).addView(this.addTextView(dayOfWeek.substring(0, 3)));
@@ -341,21 +330,44 @@ public class WidgetCalendar extends LinearLayout {
         this.tableLayout.removeAllViews();
         Calendar calendar = this.getDefaultCalendar();
         int max = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
-        for(int i = 0; i<= max; i++) {
+        if(Global.getLocale().getLanguage().equals(Locale.GERMAN.getLanguage())) {
+            max++;
+        }
+        for(int i = 0; i <= max; i++) {
             TableRow tblRow = new TableRow(this.context);
             tblRow.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
             this.tableLayout.addView(tblRow, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void addHours() {
         this.llDays.removeAllViews();
         LinearLayout linearLayout = new LinearLayout(this.context);
         linearLayout.setOrientation(HORIZONTAL);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        linearLayout.addView(this.addTextViewWithWidth("h", 150));
+        linearLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        linearLayout.addView(this.addTextViewWithWidth("h", 200));
         for(int i = 1; i<=24; i++) {
-            linearLayout.addView(this.addTextViewWithWidth(String.valueOf(i), 100));
+            final int hour = i;
+            TextView txt = this.addTextViewWithWidth(String.valueOf(i), 100);
+            txt.setOnClickListener(view -> {
+                for(int j = 0; j<=linearLayout.getChildCount() - 1; j++) {
+                    linearLayout.getChildAt(j).setBackgroundColor(WidgetUtils.getColor(this.context, android.R.color.transparent));
+                }
+                txt.setBackgroundColor(WidgetUtils.getColor(this.context, R.color.colorAccent));
+            });
+            txt.setOnLongClickListener(view -> {
+                for(int j = 0; j<=linearLayout.getChildCount() - 1; j++) {
+                    linearLayout.getChildAt(j).setBackgroundColor(WidgetUtils.getColor(this.context, android.R.color.transparent));
+                }
+                txt.setBackgroundColor(WidgetUtils.getColor(this.context, R.color.colorAccent));
+                if(this.hourHeaderClickListener!=null) {
+                    this.currentEvent.getCalendar().set(Calendar.HOUR_OF_DAY, hour);
+                    this.hourHeaderClickListener.onClick(this.currentEvent);
+                }
+                return false;
+            });
+            linearLayout.addView(txt);
         }
         this.llDays.addView(linearLayout);
 
@@ -404,10 +416,56 @@ public class WidgetCalendar extends LinearLayout {
 
             LinearLayout groupLayout = new LinearLayout(this.context);
             groupLayout.setOrientation(HORIZONTAL);
-            groupLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            groupLayout.addView(this.addTextViewWithWidth(group.getKey(), 150, group.getValue()));
+            groupLayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            groupLayout.addView(this.addTextViewWithWidth(group.getKey(), 200, group.getValue()));
+
+            String key = "";
+            int color = -1;
             for(int i = 1; i<=24; i++) {
-                groupLayout.addView(this.addTextViewWithWidth(entries.get(i - 1).getKey(), 100, entries.get(i - 1).getValue()));
+                final int hour = i;
+                if(key.equals("") || key.equals(entries.get(i - 1).getKey())) {
+                    key = entries.get(i - 1).getKey();
+                    color = entries.get(i - 1).getValue();
+                    if(key.equals("")) {
+                        TextView textView = this.addTextViewWithWidth(entries.get(i - 1).getKey(), 100, entries.get(i - 1).getValue());
+                        textView.setOnClickListener(view -> {
+                            for(int j = 0; j<=groupLayout.getChildCount()-1; j++) {
+                                TextView txt = (TextView) groupLayout.getChildAt(j);
+                                if(txt.getBackground()!=null) {
+                                    if (((ColorDrawable) txt.getBackground()).getColor() != group.getValue()) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                            txt.setBackground(null);
+                                        } else {
+                                            txt.setBackgroundDrawable(null);
+                                        }
+                                    }
+                                }
+                            }
+                            textView.setBackgroundColor(WidgetUtils.getColor(this.context, R.color.colorAccent));
+                        });
+                        textView.setOnLongClickListener(view -> {
+                            if(this.hourGroupListener!=null) {
+                                this.currentEvent.getCalendar().set(Calendar.HOUR_OF_DAY, hour);
+                                this.currentEvent.setColor(group.getValue());
+                                this.hourGroupListener.onClick(this.currentEvent);
+                            }
+                            return false;
+                        });
+                        groupLayout.addView(textView);
+                    }
+                } else {
+                    int length = 1;
+                    for(int j = i; j<=24; j++) {
+                        if(color == entries.get(j - 1).getValue()) {
+                            length++;
+                        } else {
+                            break;
+                        }
+                    }
+                    groupLayout.addView(this.addTextViewWithWidth(key, length * 100, entries.get(i - 1).getValue()));
+                    i += (length - 2);
+                    key = entries.get(i - 1).getKey();
+                }
             }
             this.llDays.addView(groupLayout);
         }
@@ -430,11 +488,18 @@ public class WidgetCalendar extends LinearLayout {
 
             for(int i = 1; i<=max; i++) {
                 calendar.set(Calendar.DAY_OF_MONTH, i);
+
                 int row = calendar.get(Calendar.WEEK_OF_MONTH);
+                if(Global.getLocale().getLanguage().equals(Locale.GERMAN.getLanguage())) {
+                    row++;
+                }
                 ((TableRow) this.tableLayout.getChildAt(row)).addView(this.addDay(i));
             }
 
             int weeks = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+            if(Global.getLocale().getLanguage().equals(Locale.GERMAN.getLanguage())) {
+                weeks++;
+            }
             int children = ((TableRow) this.tableLayout.getChildAt(weeks)).getChildCount();
             for(int i = children; i<7; i++) {
                 ((TableRow) this.tableLayout.getChildAt(weeks)).addView(this.addTextView(""));
@@ -499,7 +564,7 @@ public class WidgetCalendar extends LinearLayout {
             calendar.get(Calendar.MONTH)==today.get(Calendar.MONTH) &&
             today.get(Calendar.DAY_OF_MONTH)==currentDayOfMonth) {
 
-            linearLayout.setBackgroundColor(WidgetUtils.getColor(this.context, android.R.color.darker_gray));
+            linearLayout.setBackgroundColor(WidgetUtils.getColor(this.context, R.color.colorAccent));
             Event event = new Event() {
                 @Override
                 public int getIcon() {
@@ -524,7 +589,7 @@ public class WidgetCalendar extends LinearLayout {
                 }
             }
 
-            linearLayout.setBackgroundColor(WidgetUtils.getColor(this.context, android.R.color.darker_gray));
+            linearLayout.setBackgroundColor(WidgetUtils.getColor(this.context, R.color.colorAccent));
 
             Event event = new Event() {
                 @Override
@@ -534,9 +599,6 @@ public class WidgetCalendar extends LinearLayout {
             };
             event.setCalendar(calendar.getTime());
             this.currentEvent = event;
-            if(this.selectionListener!=null) {
-                this.selectionListener.onSelectionChanged(this.currentEvent);
-            }
             this.addHours();
             this.scrollToCurrentTime();
         });
@@ -547,9 +609,6 @@ public class WidgetCalendar extends LinearLayout {
             ((LinearLayout.LayoutParams) layout.getLayoutParams()).setMargins(0, 0, 0, 2);
             layout.setOnClickListener(v -> {
                 this.currentEvent = event;
-                if(this.selectionListener!=null) {
-                    this.selectionListener.onSelectionChanged(this.currentEvent);
-                }
                 if(this.clickListener != null) {
                     this.clickListener.onClick(event);
                 }
@@ -557,7 +616,7 @@ public class WidgetCalendar extends LinearLayout {
             layout.setOnLongClickListener(v -> {
                 this.currentEvent = event;
                 if(this.longClickListener != null) {
-                    this.longClickListener.onLongClick(this.currentEvent);
+                    this.longClickListener.onClick(this.currentEvent);
                 }
                 return false;
             });
@@ -618,7 +677,7 @@ public class WidgetCalendar extends LinearLayout {
     }
 
     private Calendar getDefaultCalendar() {
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(Global.getLocale());
         try {
             Date date = this.dateFormat.parse(this.lblCalDate.getText().toString());
             if(date != null) {
@@ -628,6 +687,7 @@ public class WidgetCalendar extends LinearLayout {
             MessageHelper.printException(ex, this.context);
         }
         calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
         return calendar;
     }
 
@@ -658,13 +718,5 @@ public class WidgetCalendar extends LinearLayout {
 
     public abstract static class ClickListener {
         public abstract void onClick(Event event);
-    }
-
-    public abstract static class SelectionListener {
-        public abstract void onSelectionChanged(Event event);
-    }
-
-    public abstract static class LongClickListener {
-        public abstract void onLongClick(Event event);
     }
 }

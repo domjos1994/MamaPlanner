@@ -71,7 +71,7 @@ public class Converter {
     public static Date convertStringToDate(String dt, String format) throws Exception {
         if(dt!=null) {
             if(!dt.isEmpty()) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.GERMAN);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Global.getLocale());
                 return simpleDateFormat.parse(dt);
             }
         }
@@ -80,7 +80,7 @@ public class Converter {
 
     public static String convertDateToString(Date date, String format) throws Exception {
         if(date!=null) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.GERMAN);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Global.getLocale());
             return simpleDateFormat.format(date);
         }
         return null;

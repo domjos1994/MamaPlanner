@@ -22,6 +22,9 @@ import androidx.annotation.NonNull;
 
 import java.util.Date;
 import java.util.Calendar;
+import java.util.Locale;
+
+import de.domjos.customwidgets.utils.Global;
 
 public abstract class Event {
     private long id;
@@ -57,7 +60,7 @@ public abstract class Event {
     }
 
     public void setCalendar(Date date) {
-        this.calendar = Calendar.getInstance();
+        this.calendar = Calendar.getInstance(Global.getLocale());
         this.calendar.setTime(date);
     }
 
@@ -65,7 +68,7 @@ public abstract class Event {
         if(date==null) {
             this.end = null;
         } else {
-            this.end = Calendar.getInstance();
+            this.end = Calendar.getInstance(Global.getLocale());
             this.end.setTime(date);
         }
     }
