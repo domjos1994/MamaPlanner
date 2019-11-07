@@ -1,0 +1,89 @@
+<!--
+  ~ MamaPlanner
+  ~ Copyright (C) 2019 Domjos
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">MamaPlanner</string>
+
+    <string name="app_event">Termin</string>
+    <string name="app_event_name">Name</string>
+    <string name="app_event_description">Beschreibung</string>
+    <string name="app_event_date">Datum</string>
+    <string name="app_event_whole_day">Ganzer Tag</string>
+
+    <string name="app_navigation_view">Ansicht</string>
+    <string name="app_navigation_view_calendar">Monat</string>
+    <string name="app_navigation_view_day">Tag</string>
+
+    <string name="app_settings_format">Format</string>
+    <string name="app_settings_format_date">Datum-Format</string>
+    <string name="app_settings_format_date_default">dd.MM.yyyy</string>
+    <string name="app_settings_format_time">Zeit-Format</string>
+
+    <string name="notifications_months">Monate</string>
+    <string name="notifications_days">Tage</string>
+    <string name="notifications_hours">Stunden</string>
+
+    <string name="app_todo">ToDo</string>
+
+    <string name="app_family">Familien-Mitglieder</string>
+    <string name="app_family_all">Alle Familien-Mitglieder</string>
+    <string name="app_family_firstName">Vorname</string>
+    <string name="app_family_lastName">Nachname</string>
+    <string name="app_family_birthDate">Geburtsdatum (%s)</string>
+    <string name="app_family_gender">Geschlecht</string>
+    <string name="app_family_color">Farbe</string>
+    <string-array name="app_family_gender_items">
+        <item>Männlich</item>
+        <item>Weiblich</item>
+        <item>Divers</item>
+    </string-array>
+    <string name="app_family_picture">Bild</string>
+
+    <string name="events_examinations">Vorsorge-Untersuchungen</string>
+    <string name="events_vaccinations">Impfungen</string>
+    <string name="events_vaccinations_1">Grundimmunisierung mit einem Rotaviren-Impfstoff</string>
+    <string name="events_vaccinations_2">1. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
+        Pneumokokken-Schutzimpfung, 2. Rotaviren-Impfung
+    </string>
+    <string name="events_vaccinations_3">2. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, 3.
+        Rotaviren-Impfung
+    </string>
+    <string name="events_vaccinations_4">3. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, 2.
+        Pneumokokken-Impfung, (3. Rotaviren-Impfung)
+    </string>
+    <string name="events_vaccinations_5">4. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
+        Meningokokken, Masern, Mumps und Röteln
+    </string>
+    <string name="events_vaccinations_6">Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
+        Pneumokokken-Impfung, Menigokokken-Impfdosis, Masern-, Mumps-, Röteln-3-fach-Impfung
+    </string>
+
+    <string name="app_menu_settings">Einstellungen</string>
+
+    <string name="sys_add">Hinzufügen</string>
+    <string name="sys_edit">Bearbeiten</string>
+    <string name="sys_cancel">Abbrechen</string>
+    <string name="sys_save">Speichern</string>
+
+    <string name="validator_empty" formatted="false">Field \'%s\' is a required field!</string>
+    <string name="validator_duplicated" formatted="false">Value \'%s\' of the field \'%s\' is already in use!</string>
+    <string name="validator_matches" formatted="false">Field \'%s\' contains invalid characters!</string>
+    <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date! (yyyy-MM-dd)</string>
+    <string name="validator_no_success">"Fields are not valid! "</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+</resources>

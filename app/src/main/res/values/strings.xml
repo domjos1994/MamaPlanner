@@ -19,61 +19,73 @@
 <resources>
     <string name="app_name">MamaPlanner</string>
 
-    <string name="app_event">Termin</string>
-    <string name="app_event_name">Name</string>
-    <string name="app_event_description">Beschreibung</string>
-    <string name="app_event_date">Datum</string>
-    <string name="app_event_whole_day">Ganzer Tag</string>
+    <string name="app_event">Event</string>
+    <string name="app_event_name" translatable="false">Name</string>
+    <string name="app_event_description">Description</string>
+    <string name="app_event_date">Date</string>
+    <string name="app_event_whole_day">Whole day</string>
 
-    <string name="app_navigation_view">Ansicht</string>
-    <string name="app_navigation_view_calendar">Monat</string>
-    <string name="app_navigation_view_day">Tag</string>
+    <string name="app_navigation_view">View</string>
+    <string name="app_navigation_view_calendar">Month</string>
+    <string name="app_navigation_view_day">Day</string>
 
-    <string name="notifications_months">Monate</string>
-    <string name="notifications_days">Tage</string>
-    <string name="notifications_hours">Stunden</string>
+
+    <string name="app_settings_format">Format</string>
+    <string name="app_settings_format_date">Date-Format</string>
+    <string name="app_settings_format_date_default">yyyy-MM-dd</string>
+    <string name="app_settings_format_time">Time-Format</string>
+    <string name="app_settings_format_time_default" translatable="false">HH:mm:dd</string>
+
+    <string name="notifications_months">Month</string>
+    <string name="notifications_days">Days</string>
+    <string name="notifications_hours">Hours</string>
 
     <string name="app_todo">ToDo</string>
 
-    <string name="app_family">Familien-Mitglieder</string>
-    <string name="app_family_all">Alle Familien-Mitglieder</string>
-    <string name="app_family_firstName">Vorname</string>
-    <string name="app_family_lastName">Nachname</string>
-    <string name="app_family_birthDate">Geburtsdatum (%s)</string>
-    <string name="app_family_gender">Geschlecht</string>
-    <string name="app_family_color">Farbe</string>
+    <string name="app_family">Family-Member</string>
+    <string name="app_family_all">All Family-Member</string>
+    <string name="app_family_firstName">First-Name</string>
+    <string name="app_family_lastName">Last-Name</string>
+    <string name="app_family_birthDate">Birth-Date (%s)</string>
+    <string name="app_family_gender">Gender</string>
+    <string name="app_family_color">Color</string>
     <string-array name="app_family_gender_items">
-        <item>Männlich</item>
-        <item>Weiblich</item>
+        <item>Male</item>
+        <item>Female</item>
         <item>Divers</item>
     </string-array>
-    <string name="app_family_picture">Bild</string>
+    <string name="app_family_picture">Picture</string>
 
-    <string name="events_examinations">Vorsorge-Untersuchungen</string>
-    <string name="events_vaccinations">Impfungen</string>
-    <string name="events_vaccinations_1">Grundimmunisierung mit einem Rotaviren-Impfstoff</string>
-    <string name="events_vaccinations_2">1. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
-        Pneumokokken-Schutzimpfung, 2. Rotaviren-Impfung
+    <string name="events_examinations">Screening tests</string>
+    <string name="events_vaccinations">Vaccinations</string>
+    <string name="events_vaccinations_1">Primary immunization with a rotavirus vaccine</string>
+    <string name="events_vaccinations_2">
+        1. tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B,
+        Pneumococcal vaccination, 2. Rotavirus vaccine
     </string>
-    <string name="events_vaccinations_3">2. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, 3.
-        Rotaviren-Impfung
+    <string name="events_vaccinations_3">
+        2. tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B, 3.
+        Rotavirus vaccination
     </string>
-    <string name="events_vaccinations_4">3. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, 2.
-        Pneumokokken-Impfung, (3. Rotaviren-Impfung)
+    <string name="events_vaccinations_4">
+        3. tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B, 2.
+        Pneumococcal vaccine, (3rd rotavirus vaccine)
     </string>
-    <string name="events_vaccinations_5">4. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
-        Meningokokken, Masern, Mumps und Röteln
+    <string name="events_vaccinations_5">
+        4. tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B,
+        Meningococci, measles, mumps and rubella
     </string>
-    <string name="events_vaccinations_6">Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
-        Pneumokokken-Impfung, Menigokokken-Impfdosis, Masern-, Mumps-, Röteln-3-fach-Impfung
+    <string name="events_vaccinations_6">
+        Tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B,
+        Pneumococcal vaccine, meningococcal vaccine dose, measles, mumps, rubella triple vaccine
     </string>
 
-    <string name="app_menu_settings">Einstellungen</string>
+    <string name="app_menu_settings">Settings</string>
 
-    <string name="sys_add">Hinzufügen</string>
-    <string name="sys_edit">Bearbeiten</string>
-    <string name="sys_cancel">Abbrechen</string>
-    <string name="sys_save">Speichern</string>
+    <string name="sys_add">Add</string>
+    <string name="sys_edit">Edit</string>
+    <string name="sys_cancel">Cancel</string>
+    <string name="sys_save">Save</string>
 
     <string name="validator_empty" formatted="false">Field \'%s\' is a required field!</string>
     <string name="validator_duplicated" formatted="false">Value \'%s\' of the field \'%s\' is already in use!</string>

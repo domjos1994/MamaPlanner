@@ -1,38 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:dist="http://schemas.android.com/apk/distribution"
-          package="de.domjos.mamaplanner">
+          xmlns:tools="http://schemas.android.com/tools" package="de.domjos.mamaplanner">
 
     <uses-feature
-            android:name="android.hardware.camera"
-            android:required="true"/>
+        android:name="android.hardware.camera"
+        android:required="true"/>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <dist:module dist:instant="true"/>
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="true"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".activities.EventActivity"
-                android:label="@string/app_event"
-                android:parentActivityName=".activities.MainActivity">
+            android:name=".activities.SettingsActivity"
+            android:label="@string/app_menu_settings"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="jelly_bean">
+
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".activities.MainActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.mamaplanner.activities.MainActivity"/>
         </activity>
         <activity
-                android:name=".activities.FamilyActivity"
-                android:label="@string/app_family"
-                android:parentActivityName=".activities.MainActivity">
+            android:name=".activities.EventActivity"
+            android:label="@string/app_event"
+            android:parentActivityName=".activities.MainActivity"
+            tools:targetApi="jelly_bean">
+
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".activities.MainActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".activities.FamilyActivity"
+            android:label="@string/app_family"
+            android:parentActivityName=".activities.MainActivity"
+            tools:targetApi="jelly_bean">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
         </activity>
         <activity
                 android:name=".activities.MainActivity"

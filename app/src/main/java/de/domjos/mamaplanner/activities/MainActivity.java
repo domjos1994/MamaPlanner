@@ -67,6 +67,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private boolean isOpen = false;
     private final static int RELOAD_FAMILY = 99;
     private final static int RELOAD_CALENDAR_EVENT = 100;
+    private final static int RELOAD_AFTER_SETTINGS = 101;
 
     public MainActivity() {
         super(R.layout.main_activity);
@@ -317,8 +318,13 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Intent intent = null;
         if (id == R.id.menMainSettings) {
-            return true;
+            intent = new Intent(this.getApplicationContext(), SettingsActivity.class);
+        }
+
+        if(intent!=null) {
+            startActivityForResult(intent, MainActivity.RELOAD_AFTER_SETTINGS);
         }
         return super.onOptionsItemSelected(item);
     }
