@@ -17,18 +17,19 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.EventActivity">
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.ToDoActivity">
 
     <TabHost
-            android:id="@android:id/tabhost"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/navigation">
+         android:id="@android:id/tabhost"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+        android:layout_above="@+id/navigation">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -44,83 +45,68 @@
                     android:background="@color/colorAccent"/>
 
             <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dip"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark">
-
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark">
                 <ScrollView
                         android:id="@+id/tab1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                    <TableLayout
+                    <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:weightSum="10">
-
-                        <TextView
-                                android:id="@+id/lblEventDate"
-                                android:layout_margin="5dp"
-                                android:gravity="center"
-                                android:textStyle="bold"
-                                android:textSize="16sp"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/app_event_date"/>
-
-                        <CheckBox
-                                android:id="@+id/chkEventWholeDay"
-                                android:text="@string/app_event_whole_day"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="10"
-                                android:checked="true"/>
-
-                        <TableRow>
-                            <TimePicker
-                                    android:id="@+id/tpEventStart"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="5"
-                                    android:timePickerMode="spinner"
-                                    android:visibility="gone"/>
-                            <TimePicker
-                                    android:id="@+id/tpEventEnd"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="5"
-                                    android:timePickerMode="spinner"
-                                    android:visibility="gone"/>
-                        </TableRow>
-
+                            android:orientation="vertical">
                         <EditText
-                                android:id="@+id/txtEventName"
-                                android:hint="@string/app_event_name"
-                                android:inputType="text"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="10"/>
-
+                            android:id="@+id/txtToDoTitle"
+                            android:hint="@string/app_todo_list_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"/>
                         <EditText
-                                android:id="@+id/txtEventDescription"
-                                android:hint="@string/app_event_description"
-                                android:inputType="textMultiLine"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="5"/>
-                    </TableLayout>
+                            android:id="@+id/txtToDoCategory"
+                            android:hint="@string/app_todo_list_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"/>
+                        <EditText
+                            android:id="@+id/txtToDoDeadline"
+                            android:hint="@string/app_todo_list_deadline"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="date"/>
+                        <EditText
+                            android:id="@+id/txtToDoDescription"
+                            android:hint="@string/app_todo_list_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"/>
+                    </LinearLayout>
                 </ScrollView>
+
                 <ScrollView
                         android:id="@+id/tab2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                        <TableLayout
-                            android:id="@+id/tblNotifications"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="3">
+                    <TableLayout
+                        android:id="@+id/tblControls"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="20"/>
+                </ScrollView>
+
+                <ScrollView
+                        android:id="@+id/tab3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    <TableLayout
+                        android:id="@+id/tblNotifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="3"
+                        android:orientation="vertical">
                         <TableRow>
                             <EditText
                                     android:hint="@string/notifications_months"

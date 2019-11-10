@@ -34,11 +34,17 @@
     <string name="app_settings_format_date_default">dd.MM.yyyy</string>
     <string name="app_settings_format_time">Zeit-Format</string>
 
+    <string name="notifications">Notifikationen</string>
     <string name="notifications_months">Monate</string>
     <string name="notifications_days">Tage</string>
     <string name="notifications_hours">Stunden</string>
 
     <string name="app_todo">ToDo</string>
+    <string name="app_todo_list">ToDo-Liste</string>
+    <string name="app_todo_list_title">Titel</string>
+    <string name="app_todo_list_description">Beschreibung</string>
+    <string name="app_todo_list_deadline">Stichtag</string>
+    <string name="app_todo_list_category">Kategorie</string>
 
     <string name="app_family">Familien-Mitglieder</string>
     <string name="app_family_all">Alle Familien-Mitglieder</string>
@@ -85,5 +91,4 @@
     <string name="validator_matches" formatted="false">Field \'%s\' contains invalid characters!</string>
     <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date! (yyyy-MM-dd)</string>
     <string name="validator_no_success">"Fields are not valid! "</string>
-    <string name="title_activity_settings">SettingsActivity</string>
 </resources>

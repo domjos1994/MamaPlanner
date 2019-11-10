@@ -36,11 +36,17 @@
     <string name="app_settings_format_time">Time-Format</string>
     <string name="app_settings_format_time_default" translatable="false">HH:mm:dd</string>
 
+    <string name="notifications">Notifications</string>
     <string name="notifications_months">Month</string>
     <string name="notifications_days">Days</string>
     <string name="notifications_hours">Hours</string>
 
     <string name="app_todo">ToDo</string>
+    <string name="app_todo_list">ToDo-List</string>
+    <string name="app_todo_list_title">Title</string>
+    <string name="app_todo_list_description">Description</string>
+    <string name="app_todo_list_deadline">Deadline</string>
+    <string name="app_todo_list_category">Category</string>
 
     <string name="app_family">Family-Member</string>
     <string name="app_family_all">All Family-Member</string>
@@ -92,4 +98,7 @@
     <string name="validator_matches" formatted="false">Field \'%s\' contains invalid characters!</string>
     <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date! (yyyy-MM-dd)</string>
     <string name="validator_no_success">"Fields are not valid! "</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

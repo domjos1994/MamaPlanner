@@ -603,7 +603,6 @@ public class WidgetCalendar extends LinearLayout {
             this.scrollToCurrentTime();
         });
 
-
         for(Event event : eventsOnDay) {
             LinearLayout layout = this.addTextViewToDay(event.getName(), event.getColor(), event.getIcon());
             ((LinearLayout.LayoutParams) layout.getLayoutParams()).setMargins(0, 0, 0, 2);

@@ -19,12 +19,7 @@
 package de.domjos.mamaplanner.activities;
 
 import android.os.Build;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.TimePicker;
+import android.widget.*;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -56,10 +51,6 @@ public final class EventActivity extends AbstractActivity {
 
     private Validator eventValidator;
 
-    static final String ID = "ID";
-    static final String DATE = "DT";
-    static final String FAMILY = "FAMILY";
-
     public EventActivity() {
         super(R.layout.event_activity);
     }
@@ -78,9 +69,9 @@ public final class EventActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         try {
-            long id = this.getIntent().getLongExtra(EventActivity.ID, 0);
-            String date = this.getIntent().getStringExtra(EventActivity.DATE);
-            long family = this.getIntent().getLongExtra(EventActivity.FAMILY, 0L);
+            long id = this.getIntent().getLongExtra(MainActivity.ID, 0);
+            String date = this.getIntent().getStringExtra(MainActivity.DATE);
+            long family = this.getIntent().getLongExtra(MainActivity.FAMILY, 0L);
             if(family==0L) {
                 this.currentFamily = null;
             } else {
@@ -89,7 +80,7 @@ public final class EventActivity extends AbstractActivity {
             if(id==0L) {
                 this.event = new CalendarEvent();
                 this.event.setCalendar(Converter.convertStringToDate(date, Global.getDateFormat()));
-                if(!this.getIntent().getBooleanExtra("wholeDay", true)) {
+                if(!this.getIntent().getBooleanExtra(MainActivity.WHOLE_DAY, true)) {
                     Calendar end = (Calendar) this.event.getCalendar().clone();
                     end.add(Calendar.HOUR_OF_DAY, 1);
                     this.event.setEnd(end.getTime());
@@ -97,6 +88,7 @@ public final class EventActivity extends AbstractActivity {
             } else {
                 this.event = MainActivity.GLOBAL.getSqLite().getEvents("ID=" + id).get(0);
             }
+            this.initTabHost();
 
             BottomNavigationView navigation = this.findViewById(R.id.navigation);
             navigation.getMenu().findItem(R.id.navSysAdd).setVisible(false);
@@ -136,6 +128,23 @@ public final class EventActivity extends AbstractActivity {
         } catch (Exception ex) {
             MessageHelper.printException(ex, EventActivity.this);
         }
+    }
+
+    private void initTabHost() {
+        TabHost tabHost = this.findViewById(android.R.id.tabhost);
+        tabHost.setup();
+
+        TabHost.TabSpec tabSpec1 = tabHost.newTabSpec(this.getString(R.string.app_event));
+        tabSpec1.setIndicator(this.getString(R.string.app_event));
+        tabSpec1.setContent(R.id.tab1);
+        tabHost.addTab(tabSpec1);
+
+        TabHost.TabSpec tabSpec2 = tabHost.newTabSpec(this.getString(R.string.notifications));
+        tabSpec2.setIndicator(this.getString(R.string.notifications));
+        tabSpec2.setContent(R.id.tab2);
+        tabHost.addTab(tabSpec2 );
+
+        tabHost.setCurrentTab(0);
     }
 
     @Override

@@ -39,7 +39,9 @@ import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.WidgetUtils;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.model.calendar.CalendarEvent;
+import de.domjos.mamaplanner.model.calendar.CalendarToDoList;
 import de.domjos.mamaplanner.model.calendar.Notification;
+import de.domjos.mamaplanner.model.calendar.ToDo;
 import de.domjos.mamaplanner.model.family.Family;
 import de.domjos.mamaplanner.model.objects.IDatabaseObject;
 import de.domjos.mamaplanner.settings.Global;
@@ -265,6 +267,82 @@ public class SQLite extends SQLiteOpenHelper {
         return events;
     }
 
+    public void insertOrUpdateToDoList(CalendarToDoList toDoList, Family family) {
+        SQLiteStatement sqLiteStatement = this.getStatement(toDoList, Arrays.asList("name", "description", "family", "end"));
+        sqLiteStatement.bindString(1, toDoList.getName());
+        sqLiteStatement.bindString(2, toDoList.getDescription());
+        if(family == null) {
+            sqLiteStatement.bindLong(3, 0);
+        } else {
+            sqLiteStatement.bindLong(3, family.getID());
+        }
+        if(toDoList.getCalendar()!=null) {
+            sqLiteStatement.bindLong(4, toDoList.getCalendar().getTime().getTime());
+        } else {
+            sqLiteStatement.bindNull(4);
+        }
+        CalendarToDoList calendarToDoList= (CalendarToDoList) this.execute(sqLiteStatement, toDoList);
+        this.deleteItem(new Notification(), "toDoList=" + calendarToDoList.getID());
+        for(Notification notification : calendarToDoList.getNotifications()) {
+            this.insertOrUpdateNotification(notification, calendarToDoList);
+        }
+        this.deleteItem(new ToDo(), "list=" + calendarToDoList.getID());
+        for(ToDo toDo : calendarToDoList.getToDos()) {
+            this.insertOrUpdateToDo(toDo, calendarToDoList);
+        }
+    }
+
+    public List<CalendarToDoList> getToDoLists(String where) throws Exception {
+        List<CalendarToDoList> events = new LinkedList<>();
+        Cursor cursor = this.getCursor(new CalendarToDoList(), where);
+        while (cursor.moveToNext()) {
+            CalendarToDoList calendarEvent = new CalendarToDoList();
+            calendarEvent.setID(cursor.getInt(cursor.getColumnIndex("ID")));
+            calendarEvent.setName(cursor.getString(cursor.getColumnIndex("name")));
+            calendarEvent.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+
+            long end = cursor.getLong(cursor.getColumnIndex("end"));
+            if(end != 0) {
+                Date endDate = new Date();
+                endDate.setTime(end);
+                calendarEvent.setCalendar(endDate);
+            }
+
+            calendarEvent.setTimeStamp(cursor.getLong(cursor.getColumnIndex("timeStamp")));
+            int familyID = cursor.getInt(cursor.getColumnIndex("family"));
+            if(familyID != 0) {
+                Family family = this.getFamily("ID=" + familyID).get(0);
+                calendarEvent.setFamily(family);
+                calendarEvent.setColor(family.getColor());
+            }
+            calendarEvent.setNotifications(this.getNotifications("toDoList=" + calendarEvent.getID()));
+            calendarEvent.setToDos(this.getToDos("list=" + calendarEvent.getID()));
+            events.add(calendarEvent);
+        }
+        return events;
+    }
+
+    private void insertOrUpdateToDo(ToDo toDo, CalendarToDoList calendarToDoList) {
+        SQLiteStatement sqLiteStatement = this.getStatement(toDo, Arrays.asList("name", "checked", "list"));
+        sqLiteStatement.bindString(1, toDo.getContent());
+        sqLiteStatement.bindLong(2, toDo.isChecked() ? 1 : 0);
+        sqLiteStatement.bindLong(3, calendarToDoList.getID());
+        this.execute(sqLiteStatement, toDo);
+    }
+
+    private List<ToDo> getToDos(String where) {
+        List<ToDo> toDos = new LinkedList<>();
+        Cursor cursor = this.getCursor(new ToDo(), where);
+        while (cursor.moveToNext()) {
+            ToDo toDo = new ToDo();
+            toDo.setID(cursor.getLong(cursor.getColumnIndex("ID")));
+            toDo.setContent(cursor.getString(cursor.getColumnIndex("name")));
+            toDo.setChecked(cursor.getInt(cursor.getColumnIndex("checked"))==1);
+            toDos.add(toDo);
+        }
+        return toDos;
+    }
+
     private void insertOrUpdateNotification(Notification notification, CalendarEvent event) {
         SQLiteStatement sqLiteStatement = this.getStatement(notification, Arrays.asList("months", "days", "hours", "event"));
         sqLiteStatement.bindLong(1, notification.getMonths());
@@ -274,7 +352,16 @@ public class SQLite extends SQLiteOpenHelper {
         this.execute(sqLiteStatement, notification);
     }
 
-    public List<Notification> getNotifications(String where) {
+    private void insertOrUpdateNotification(Notification notification, CalendarToDoList toDoList) {
+        SQLiteStatement sqLiteStatement = this.getStatement(notification, Arrays.asList("months", "days", "hours", "toDoList"));
+        sqLiteStatement.bindLong(1, notification.getMonths());
+        sqLiteStatement.bindLong(2, notification.getDays());
+        sqLiteStatement.bindLong(3, notification.getHours());
+        sqLiteStatement.bindLong(4, toDoList.getID());
+        this.execute(sqLiteStatement, notification);
+    }
+
+    private List<Notification> getNotifications(String where) {
         List<Notification> notifications = new LinkedList<>();
         Cursor cursor = this.getCursor(new Notification(), where);
         while (cursor.moveToNext()) {
@@ -293,7 +380,7 @@ public class SQLite extends SQLiteOpenHelper {
         this.getWritableDatabase().execSQL("DELETE FROM " + iDatabaseObject.getTable() + " WHERE ID=" + iDatabaseObject.getID());
     }
 
-    public void deleteItem(IDatabaseObject iDatabaseObject, String where) {
+    private void deleteItem(IDatabaseObject iDatabaseObject, String where) {
         this.getWritableDatabase().execSQL("DELETE FROM " + iDatabaseObject.getTable() + " WHERE " + where);
     }
 

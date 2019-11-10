@@ -18,33 +18,20 @@
 
 package de.domjos.mamaplanner.model.calendar;
 
-import de.domjos.customwidgets.widgets.calendar.Event;
-import de.domjos.mamaplanner.R;
-import de.domjos.mamaplanner.model.family.Family;
 import de.domjos.mamaplanner.model.objects.IDatabaseObject;
 
-import java.util.LinkedList;
-import java.util.List;
-
-public final class CalendarToDoList extends Event implements IDatabaseObject {
+public class ToDo implements IDatabaseObject {
     private long ID, timeStamp;
-    private String category;
-    private Family family;
-    private List<Notification> notifications;
-    private List<ToDo> toDos;
+    private String content;
+    private boolean checked;
 
-    public CalendarToDoList() {
+    public ToDo() {
         super();
 
         this.ID = 0L;
         this.timeStamp = 0L;
-        this.notifications = new LinkedList<>();
-        this.toDos = new LinkedList<>();
-    }
-
-    @Override
-    public int getIcon() {
-        return R.drawable.ic_todo;
+        this.content = "";
+        this.checked = false;
     }
 
     @Override
@@ -69,38 +56,22 @@ public final class CalendarToDoList extends Event implements IDatabaseObject {
 
     @Override
     public String getTable() {
-        return "todoLists";
+        return "toDos";
     }
 
-    public String getCategory() {
-        return this.category;
+    public String getContent() {
+        return this.content;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Family getFamily() {
-        return this.family;
+    public boolean isChecked() {
+        return this.checked;
     }
 
-    public void setFamily(Family family) {
-        this.family = family;
-    }
-
-    public List<Notification> getNotifications() {
-        return this.notifications;
-    }
-
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
-
-    public List<ToDo> getToDos() {
-        return this.toDos;
-    }
-
-    public void setToDos(List<ToDo> toDos) {
-        this.toDos = toDos;
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
