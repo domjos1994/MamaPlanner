@@ -36,5 +36,6 @@
 
     <style name="DialogButtonStyled" parent="Theme.MaterialComponents.Light">
         <item name="android:textColor">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 </resources>

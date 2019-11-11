@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -371,6 +372,7 @@ public final class FamilyActivity extends AbstractActivity {
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 Bitmap bitmap = BitmapFactory.decodeFile(cursor.getString(columnIndex));
+                bitmap = ThumbnailUtils.extractThumbnail(bitmap, 256, 256);
                 cursor.close();
 
                 if(bitmap != null) {
