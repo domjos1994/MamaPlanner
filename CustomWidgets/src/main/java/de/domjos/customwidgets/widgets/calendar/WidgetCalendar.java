@@ -199,6 +199,18 @@ public class WidgetCalendar extends LinearLayout {
                 MessageHelper.printException(ex, this.context);
             }
         });
+
+        this.lblCalDate.setOnLongClickListener(view -> {
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                this.lblCalDate.setText(this.dateFormat.format(calendar.getTime()));
+                this.reloadCalendar();
+            } catch (Exception ex) {
+                MessageHelper.printException(ex, this.context);
+            }
+            return false;
+        });
     }
 
     private void initDefaults(Context context) {
@@ -308,13 +320,6 @@ public class WidgetCalendar extends LinearLayout {
         this.horizontalScrollView.addView(this.llDays);
 
         this.reloadCalendar();
-    }
-
-    private SpannableString getSpan(int res) {
-        ImageSpan imageSpan = new ImageSpan(this.context, res);
-        SpannableString content = new SpannableString(" ");
-        content.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return content;
     }
 
     private void addDaysOfWeek() {
