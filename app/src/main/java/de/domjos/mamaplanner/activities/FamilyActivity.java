@@ -19,6 +19,7 @@
 package de.domjos.mamaplanner.activities;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -39,6 +40,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.turkialkhateeb.materialcolorpicker.ColorChooserDialog;
+
+import java.util.Calendar;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.ListObject;
@@ -105,6 +108,32 @@ public final class FamilyActivity extends AbstractActivity {
             ColorChooserDialog cp = new ColorChooserDialog(FamilyActivity.this);
             cp.setColorListener((v, color) -> this.lblFamilyColor.setBackgroundColor(color));
             cp.show();
+        });
+
+        this.txtFamilyBirthDate.setOnClickListener(view -> {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(FamilyActivity.this, R.style.DialogButtonStyled);
+                try {
+                    String content = this.txtFamilyBirthDate.getText().toString();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(Converter.convertStringToDate(content, Global.getDateFormat().split(" ")[0]));
+                    int year = calendar.get(Calendar.YEAR), month = calendar.get(Calendar.MONTH),
+                            day = calendar.get(Calendar.DAY_OF_MONTH);
+                    datePickerDialog.updateDate(year, month, day);
+                } catch (Exception ignored) {}
+                datePickerDialog.setOnDateSetListener((datePicker, i, i1, i2) -> {
+                    try {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, i);
+                        calendar.set(Calendar.MONTH, i1);
+                        calendar.set(Calendar.DAY_OF_MONTH, i2);
+                        txtFamilyBirthDate.setText(Converter.convertDateToString(calendar.getTime(), Global.getDateFormat().split(" ")[0]));
+                    } catch (Exception ex) {
+                        MessageHelper.printException(ex, FamilyActivity.this);
+                    }
+                });
+                datePickerDialog.show();
+            }
         });
 
         this.cmdFamilyCamera.setOnClickListener(view -> this.dispatchTakePictureIntent());

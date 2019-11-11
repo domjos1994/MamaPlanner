@@ -123,16 +123,40 @@ public class Validator {
 
     private boolean controlFieldEqualsDate(EditText txt) {
         try {
-            String dateFormat = Global.getDateFormat().split(" ")[0];
             if (txt != null) {
                 if (txt.getText() != null) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.GERMAN);
-                    simpleDateFormat.parse(txt.getText().toString());
-                    return true;
+                    String dateFormat = Global.getDateFormat().split(" ")[0];
+                    String separator = dateFormat.contains("-") ? "-" : dateFormat.contains(".") ? "." : "";
+                    if (separator.isEmpty()) {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.GERMAN);
+                        simpleDateFormat.parse(txt.getText().toString());
+                        return true;
+                    } else {
+                        if (!txt.getText().toString().contains(separator)) {
+                            String[] parts = dateFormat.split(separator);
+
+                            int index = 0;
+                            String content = txt.getText().toString();
+                            StringBuilder newContent = new StringBuilder();
+                            for(String part : parts) {
+                                newContent.append(content.substring(index, index + part.length()));
+                                newContent.append(separator);
+                                index += part.length();
+                            }
+                            newContent.setCharAt(newContent.lastIndexOf(separator), ' ');
+                            txt.setText(newContent.toString().trim());
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.GERMAN);
+                            simpleDateFormat.parse(txt.getText().toString());
+                            return true;
+                        } else {
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.GERMAN);
+                            simpleDateFormat.parse(txt.getText().toString());
+                            return true;
+                        }
+                    }
                 }
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
         return false;
     }
 
