@@ -50,7 +50,7 @@
     <string name="app_family_all">Alle Familien-Mitglieder</string>
     <string name="app_family_firstName">Vorname</string>
     <string name="app_family_lastName">Nachname</string>
-    <string name="app_family_birthDate">Geburtsdatum (%s)</string>
+    <string name="app_family_birthDate">Geburtsdatum</string>
     <string name="app_family_gender">Geschlecht</string>
     <string name="app_family_color">Farbe</string>
     <string-array name="app_family_gender_items">
@@ -62,22 +62,12 @@
 
     <string name="events_examinations">Vorsorge-Untersuchungen</string>
     <string name="events_vaccinations">Impfungen</string>
-    <string name="events_vaccinations_1">Grundimmunisierung mit einem Rotaviren-Impfstoff</string>
-    <string name="events_vaccinations_2">1. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
-        Pneumokokken-Schutzimpfung, 2. Rotaviren-Impfung
-    </string>
-    <string name="events_vaccinations_3">2. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, 3.
-        Rotaviren-Impfung
-    </string>
-    <string name="events_vaccinations_4">3. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B, 2.
-        Pneumokokken-Impfung, (3. Rotaviren-Impfung)
-    </string>
-    <string name="events_vaccinations_5">4. Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
-        Meningokokken, Masern, Mumps und Röteln
-    </string>
-    <string name="events_vaccinations_6">Tetanus, Diphtherie, Keuchhusten, Hib, Kinderlähmung und Hepatitis B,
-        Pneumokokken-Impfung, Menigokokken-Impfdosis, Masern-, Mumps-, Röteln-3-fach-Impfung
-    </string>
+    <string name="events_vaccinations_1">1. Impfungen</string>
+    <string name="events_vaccinations_2">2. Impfungen</string>
+    <string name="events_vaccinations_3">3. Impfungen</string>
+    <string name="events_vaccinations_4">4. Impfungen</string>
+    <string name="events_vaccinations_5">5. Impfungen</string>
+    <string name="events_vaccinations_6">6. Impfungen</string>
 
     <string name="app_menu_settings">Einstellungen</string>
 
@@ -89,6 +79,6 @@
     <string name="validator_empty" formatted="false">Field \'%s\' is a required field!</string>
     <string name="validator_duplicated" formatted="false">Value \'%s\' of the field \'%s\' is already in use!</string>
     <string name="validator_matches" formatted="false">Field \'%s\' contains invalid characters!</string>
-    <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date! (yyyy-MM-dd)</string>
+    <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date!</string>
     <string name="validator_no_success">"Fields are not valid! "</string>
 </resources>

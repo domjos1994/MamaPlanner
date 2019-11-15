@@ -146,7 +146,6 @@ public final class FamilyActivity extends AbstractActivity {
         this.txtFamilyFirstName = this.findViewById(R.id.txtFamilyFirstName);
         this.txtFamilyLastName = this.findViewById(R.id.txtFamilyLastName);
         this.txtFamilyBirthDate = this.findViewById(R.id.txtFamilyBirthDate);
-        this.txtFamilyBirthDate.setHint(String.format(this.getString(R.string.app_family_birthDate), Global.getDateFormat().split(" ")[0]));
 
         this.lblFamilyColor = this.findViewById(R.id.lblFamilyColor);
 

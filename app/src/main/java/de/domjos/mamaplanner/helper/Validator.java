@@ -19,13 +19,13 @@
 package de.domjos.mamaplanner.helper;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,76 +34,82 @@ import de.domjos.mamaplanner.settings.Global;
 
 public class Validator {
     private Context context;
-    private Map<EditText, Map.Entry<ValidatorType, String>> executeLater;
+    private Map<String, Boolean> states;
+    private Map<EditText, Finisher> finishers;
+    private final List<String> supportedFormats = Arrays.asList("dd.MM.yyyy", "dd-MM-yyyy", "yyyy-MM-dd", "yyyy.MM.dd", "yyyy/MM/dd", "dd/MM/yyyy");
 
     public Validator(Context context) {
         this.context = context;
-        this.executeLater = new LinkedHashMap<>();
+        this.states = new LinkedHashMap<>();
+        this.finishers = new LinkedHashMap<>();
     }
 
     public void addEmptyValidator(EditText txt) {
         this.addStar(txt);
-        this.executeLater.put(txt, new AbstractMap.SimpleEntry<>(ValidatorType.empty, ""));
-    }
+        states.put(txt.getId() + "empty", controlFieldIsEmpty(txt));
 
-    public void addDuplicatedEntry(EditText txt, String table, String column, long id) {
-        this.addStar(txt);
-        this.executeLater.put(txt, new AbstractMap.SimpleEntry<>(ValidatorType.duplicated, table + ":" + column + ":" + id));
+        txt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                states.put(txt.getId() + "empty", controlFieldIsEmpty(txt));
+            }
+        });
     }
 
     public void addValueEqualsRegex(EditText txt, String regex) {
-        this.addStar(txt);
-        this.executeLater.put(txt, new AbstractMap.SimpleEntry<>(ValidatorType.regex, regex));
+        this.states.put(txt.getId() + "regex", this.controlFieldEqualsRegex(txt, regex));
+
+        txt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                states.put(txt.getId() + "regex", controlFieldEqualsRegex(txt, regex));
+            }
+        });
     }
 
     public void addValueEqualsDate(EditText txt) {
-        this.addStar(txt);
-        this.executeLater.put(txt, new AbstractMap.SimpleEntry<>(ValidatorType.date, ""));
+        this.finishers.put(txt, Finisher.convertDate);
+        this.states.put(txt.getId() + "dt", this.controlFieldEqualsDate(txt));
+
+        txt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                states.put(txt.getId() + "dt", controlFieldEqualsDate(txt));
+            }
+        });
     }
 
     public boolean getState() {
-        boolean state = true;
-        for (Map.Entry<EditText, Map.Entry<ValidatorType, String>> entry : this.executeLater.entrySet()) {
-            ValidatorType type = entry.getValue().getKey();
-            EditText txt = entry.getKey();
-            String value = entry.getValue().getValue();
-
-            boolean currentState;
-            switch (type) {
-                case empty:
-                    currentState = this.controlFieldIsEmpty(txt);
-                    if (!currentState) {
-                        state = false;
-                    }
-                    break;
-                case regex:
-                    currentState = this.controlFieldEqualsRegex(txt, value);
-                    if (!currentState) {
-                        state = false;
-                    }
-                    break;
-                case date:
-                    currentState = this.controlFieldEqualsDate(txt);
-                    if (!currentState) {
-                        state = false;
-                    }
-                    break;
+        for(Boolean state : this.states.values()) {
+            if(!state) {
+                return false;
             }
         }
-
-        return state;
+        for(Map.Entry<EditText, Finisher> entry : this.finishers.entrySet()) {
+            if(entry.getValue() == Finisher.convertDate) {
+                this.executeDateFinisher(entry.getKey());
+            }
+        }
+        return true;
     }
 
-    public void removeValidator(EditText txt) {
-        txt.setError(null);
-        for (Map.Entry<EditText, Map.Entry<ValidatorType, String>> entry : this.executeLater.entrySet()) {
-            if (txt.getId() == entry.getKey().getId()) {
-                this.executeLater.remove(entry.getKey());
-            }
-        }
-        if (txt.getHint().toString().endsWith(" *")) {
-            txt.setHint(txt.getHint().toString().replace(" *", ""));
-        }
+    private enum Finisher {
+        convertDate
     }
 
     private boolean controlFieldIsEmpty(EditText txt) {
@@ -122,42 +128,31 @@ public class Validator {
     }
 
     private boolean controlFieldEqualsDate(EditText txt) {
-        try {
-            if (txt != null) {
-                if (txt.getText() != null) {
-                    String dateFormat = Global.getDateFormat().split(" ")[0];
-                    String separator = dateFormat.contains("-") ? "-" : dateFormat.contains(".") ? "." : "";
-                    if (separator.isEmpty()) {
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.GERMAN);
-                        simpleDateFormat.parse(txt.getText().toString());
-                        return true;
-                    } else {
-                        if (!txt.getText().toString().contains(separator)) {
-                            String[] parts = dateFormat.split(separator);
-
-                            int index = 0;
-                            String content = txt.getText().toString();
-                            StringBuilder newContent = new StringBuilder();
-                            for(String part : parts) {
-                                newContent.append(content.substring(index, index + part.length()));
-                                newContent.append(separator);
-                                index += part.length();
-                            }
-                            newContent.setCharAt(newContent.lastIndexOf(separator), ' ');
-                            txt.setText(newContent.toString().trim());
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.GERMAN);
-                            simpleDateFormat.parse(txt.getText().toString());
-                            return true;
-                        } else {
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.GERMAN);
-                            simpleDateFormat.parse(txt.getText().toString());
-                            return true;
-                        }
-                    }
+        for(String format : this.supportedFormats) {
+            try {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Global.getLocale());
+                Date dt = simpleDateFormat.parse(txt.getText().toString());
+                if(dt != null) {
+                    txt.setError(null);
+                    return true;
                 }
-            }
-        } catch (Exception ignored) {}
+            } catch (Exception ignored) {}
+        }
+        txt.setError(String.format(this.context.getString(R.string.validator_noDate), txt.getHint()));
         return false;
+    }
+
+    private void executeDateFinisher(EditText txt) {
+        for(String format : this.supportedFormats) {
+            try {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Global.getLocale());
+                Date dt = simpleDateFormat.parse(txt.getText().toString());
+                if(dt != null) {
+                    simpleDateFormat = new SimpleDateFormat(Global.getDateFormat().split(" ")[0], Global.getLocale());
+                    txt.setText(simpleDateFormat.format(dt));
+                }
+            } catch (Exception ignored) {}
+        }
     }
 
     private boolean controlFieldEqualsRegex(EditText txt, String regex) {
@@ -180,12 +175,5 @@ public class Validator {
         if (!hint.endsWith(" *")) {
             txt.setHint(hint + " *");
         }
-    }
-
-    private enum ValidatorType {
-        empty,
-        duplicated,
-        regex,
-        date
     }
 }

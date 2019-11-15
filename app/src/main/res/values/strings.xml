@@ -52,7 +52,7 @@
     <string name="app_family_all">All Family-Member</string>
     <string name="app_family_firstName">First-Name</string>
     <string name="app_family_lastName">Last-Name</string>
-    <string name="app_family_birthDate">Birth-Date (%s)</string>
+    <string name="app_family_birthDate">Birth-Date</string>
     <string name="app_family_gender">Gender</string>
     <string name="app_family_color">Color</string>
     <string-array name="app_family_gender_items">
@@ -64,27 +64,12 @@
 
     <string name="events_examinations">Screening tests</string>
     <string name="events_vaccinations">Vaccinations</string>
-    <string name="events_vaccinations_1">Primary immunization with a rotavirus vaccine</string>
-    <string name="events_vaccinations_2">
-        1. tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B,
-        Pneumococcal vaccination, 2. Rotavirus vaccine
-    </string>
-    <string name="events_vaccinations_3">
-        2. tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B, 3.
-        Rotavirus vaccination
-    </string>
-    <string name="events_vaccinations_4">
-        3. tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B, 2.
-        Pneumococcal vaccine, (3rd rotavirus vaccine)
-    </string>
-    <string name="events_vaccinations_5">
-        4. tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B,
-        Meningococci, measles, mumps and rubella
-    </string>
-    <string name="events_vaccinations_6">
-        Tetanus, diphtheria, whooping cough, Hib, polio and hepatitis B,
-        Pneumococcal vaccine, meningococcal vaccine dose, measles, mumps, rubella triple vaccine
-    </string>
+    <string name="events_vaccinations_1">1. Vaccinations</string>
+    <string name="events_vaccinations_2">2. Vaccinations</string>
+    <string name="events_vaccinations_3">3. Vaccinations</string>
+    <string name="events_vaccinations_4">4. Vaccinations</string>
+    <string name="events_vaccinations_5">5. Vaccinations</string>
+    <string name="events_vaccinations_6">6. Vaccinations</string>
 
     <string name="app_menu_settings">Settings</string>
 
@@ -96,9 +81,6 @@
     <string name="validator_empty" formatted="false">Field \'%s\' is a required field!</string>
     <string name="validator_duplicated" formatted="false">Value \'%s\' of the field \'%s\' is already in use!</string>
     <string name="validator_matches" formatted="false">Field \'%s\' contains invalid characters!</string>
-    <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date! (yyyy-MM-dd)</string>
+    <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date!</string>
     <string name="validator_no_success">"Fields are not valid! "</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
