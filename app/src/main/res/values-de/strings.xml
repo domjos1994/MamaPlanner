@@ -31,8 +31,10 @@
 
     <string name="app_settings_format">Format</string>
     <string name="app_settings_format_date">Datum-Format</string>
+    <string name="app_settings_format_date_summary">Geben Sie hier das Datum-Format ein!</string>
     <string name="app_settings_format_date_default">dd.MM.yyyy</string>
     <string name="app_settings_format_time">Zeit-Format</string>
+    <string name="app_settings_format_time_summary">Geben Sie hier das Zeit-Format ein!</string>
 
     <string name="notifications">Notifikationen</string>
     <string name="notifications_months">Monate</string>

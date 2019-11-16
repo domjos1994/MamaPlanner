@@ -19,16 +19,20 @@
 package de.domjos.mamaplanner.settings;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import java.util.Locale;
 
+import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.helper.SQLite;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Global {
     private SQLite sqLite;
-
+    private static final String DATE = "txtSettingsFormatDate", TIME = "txtSettingsFormatTime";
 
     public static int getVersion(Context context) {
         try {
@@ -38,12 +42,11 @@ public class Global {
         return 0;
     }
 
-    public static String getDateFormat() {
-        if(Global.getLocale().getLanguage().equals(Locale.GERMAN.getLanguage())) {
-            return "dd.MM.yyyy HH:mm:ss";
-        } else {
-            return "yyyy-MM-dd HH:mm:ss";
-        }
+    public static String getDateFormat(Context context) {
+        String dateFormat = Global.getSettingFromPreference(Global.DATE, context.getString(R.string.app_settings_format_date_default), context);
+        String timeFormat = Global.getSettingFromPreference(Global.TIME, context.getString(R.string.app_settings_format_time_default), context);
+
+        return dateFormat + " " + timeFormat;
     }
 
     public static Locale getLocale() {
@@ -61,5 +64,10 @@ public class Global {
 
     public void setSqLite(SQLite sqLite) {
         this.sqLite = sqLite;
+    }
+
+    private static String getSettingFromPreference(String key, String def, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getPackageName(), MODE_PRIVATE);
+        return sharedPreferences.getString(key, def);
     }
 }

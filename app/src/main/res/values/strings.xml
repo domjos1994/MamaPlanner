@@ -32,8 +32,10 @@
 
     <string name="app_settings_format">Format</string>
     <string name="app_settings_format_date">Date-Format</string>
+    <string name="app_settings_format_date_summary">Enter the Date-Format you want to choose!</string>
     <string name="app_settings_format_date_default">yyyy-MM-dd</string>
     <string name="app_settings_format_time">Time-Format</string>
+    <string name="app_settings_format_time_summary">Enter the Time-Format you want to choose!</string>
     <string name="app_settings_format_time_default" translatable="false">HH:mm:dd</string>
 
     <string name="notifications">Notifications</string>

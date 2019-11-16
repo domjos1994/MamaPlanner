@@ -17,14 +17,18 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
-            android:key="txtSettingsFormatDate"
-            android:text="@string/app_settings_format_date"
-            android:defaultValue="@string/app_settings_format_date_default"/>
+        android:key="txtSettingsFormatDate"
+        android:icon="@drawable/ic_event"
+        android:title="@string/app_settings_format_date"
+        android:summary="@string/app_settings_format_date_summary"
+        android:defaultValue="@string/app_settings_format_date_default"/>
     <EditTextPreference
-            android:key="txtSettingsFormatTime"
-            android:text="@string/app_settings_format_time"
-            android:defaultValue="@string/app_settings_format_time_default"/>
-</androidx.preference.PreferenceScreen>
+        android:key="txtSettingsFormatTime"
+        android:icon="@drawable/ic_event"
+        android:title="@string/app_settings_format_time"
+        android:summary="@string/app_settings_format_time_summary"
+        android:defaultValue="@string/app_settings_format_time_default"/>
+</PreferenceScreen>

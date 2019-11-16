@@ -117,7 +117,7 @@ public final class FamilyActivity extends AbstractActivity {
                 try {
                     String content = this.txtFamilyBirthDate.getText().toString();
                     Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(Converter.convertStringToDate(content, Global.getDateFormat().split(" ")[0]));
+                    calendar.setTime(Converter.convertStringToDate(content, Global.getDateFormat(getApplicationContext()).split(" ")[0]));
                     int year = calendar.get(Calendar.YEAR), month = calendar.get(Calendar.MONTH),
                             day = calendar.get(Calendar.DAY_OF_MONTH);
                     datePickerDialog.updateDate(year, month, day);
@@ -128,7 +128,7 @@ public final class FamilyActivity extends AbstractActivity {
                         calendar.set(Calendar.YEAR, i);
                         calendar.set(Calendar.MONTH, i1);
                         calendar.set(Calendar.DAY_OF_MONTH, i2);
-                        txtFamilyBirthDate.setText(Converter.convertDateToString(calendar.getTime(), Global.getDateFormat().split(" ")[0]));
+                        txtFamilyBirthDate.setText(Converter.convertDateToString(calendar.getTime(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
                     } catch (Exception ex) {
                         MessageHelper.printException(ex, FamilyActivity.this);
                     }
@@ -196,7 +196,7 @@ public final class FamilyActivity extends AbstractActivity {
                     listObject = new ListObject<>(FamilyActivity.this, R.mipmap.ic_launcher_round);
                 }
                 listObject.setTitle(String.format("%s %s", family.getFirstName(), family.getLastName()));
-                listObject.setSubTitle(Converter.convertDateToString(family.getBirthDate(), Global.getDateFormat()));
+                listObject.setSubTitle(Converter.convertDateToString(family.getBirthDate(), Global.getDateFormat(getApplicationContext())));
                 listObject.setObject(family);
                 this.lvFamily.getAdapter().add(listObject);
             }
@@ -282,7 +282,7 @@ public final class FamilyActivity extends AbstractActivity {
             this.txtFamilyFirstName.setText(this.currentFamily.getFirstName());
             this.txtFamilyLastName.setText(this.currentFamily.getLastName());
             if(this.currentFamily.getBirthDate()!=null) {
-                this.txtFamilyBirthDate.setText(Converter.convertDateToString(this.currentFamily.getBirthDate(), Global.getDateFormat().split(" ")[0]));
+                this.txtFamilyBirthDate.setText(Converter.convertDateToString(this.currentFamily.getBirthDate(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
             } else {
                 this.txtFamilyBirthDate.setText("");
             }
@@ -326,7 +326,7 @@ public final class FamilyActivity extends AbstractActivity {
             this.currentFamily.setFirstName(this.txtFamilyFirstName.getText().toString());
             this.currentFamily.setLastName(this.txtFamilyLastName.getText().toString());
             if(!this.txtFamilyBirthDate.getText().toString().isEmpty()) {
-                this.currentFamily.setBirthDate(Converter.convertStringToDate(this.txtFamilyBirthDate.getText().toString(), Global.getDateFormat().split(" ")[0]));
+                this.currentFamily.setBirthDate(Converter.convertStringToDate(this.txtFamilyBirthDate.getText().toString(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
             }
             switch (this.spFamilyGender.getSelectedItemPosition()) {
                 case 0:

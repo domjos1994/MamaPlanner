@@ -37,15 +37,6 @@ public final class SettingsActivity extends AbstractActivity {
 
     @Override
     protected void initControls() {
-        Toolbar toolbar = this.findViewById(R.id.toolbar);
-        this.setSupportActionBar(toolbar);
-
-        ActionBar actionBar = this.getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-        }
-
-        getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new PreferenceFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.llMain, new PreferenceFragment()).commit();
     }
 }

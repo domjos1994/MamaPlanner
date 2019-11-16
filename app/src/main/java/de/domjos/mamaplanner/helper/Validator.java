@@ -157,7 +157,7 @@ public class Validator {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Global.getLocale());
                 Date dt = simpleDateFormat.parse(txt.getText().toString());
                 if(dt != null) {
-                    simpleDateFormat = new SimpleDateFormat(Global.getDateFormat().split(" ")[0], Global.getLocale());
+                    simpleDateFormat = new SimpleDateFormat(Global.getDateFormat(this.context).split(" ")[0], Global.getLocale());
                     txt.setText(simpleDateFormat.format(dt));
                 }
             } catch (Exception ignored) {}

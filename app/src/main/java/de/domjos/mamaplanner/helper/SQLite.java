@@ -119,7 +119,7 @@ public class SQLite extends SQLiteOpenHelper {
         SQLiteStatement sqLiteStatement = this.getStatement(family, Arrays.asList("firstName", "lastName", "birthDate", "gender", "profilePicture", "color"));
         sqLiteStatement.bindString(1, family.getFirstName());
         sqLiteStatement.bindString(2, family.getLastName());
-        sqLiteStatement.bindString(3, Converter.convertDateToString(family.getBirthDate(), Global.getDateFormat()));
+        sqLiteStatement.bindString(3, Converter.convertDateToString(family.getBirthDate(), Global.getDateFormat(this.context)));
         sqLiteStatement.bindString(4, family.getGender());
         if(family.getProfilePicture()!=null) {
             sqLiteStatement.bindBlob(5, family.getProfilePicture());
@@ -223,7 +223,7 @@ public class SQLite extends SQLiteOpenHelper {
             family.setID(cursor.getInt(cursor.getColumnIndex("ID")));
             family.setFirstName(cursor.getString(cursor.getColumnIndex("firstName")));
             family.setLastName(cursor.getString(cursor.getColumnIndex("lastName")));
-            family.setBirthDate(Converter.convertStringToDate(cursor.getString(cursor.getColumnIndex("birthDate")), Global.getDateFormat()));
+            family.setBirthDate(Converter.convertStringToDate(cursor.getString(cursor.getColumnIndex("birthDate")), Global.getDateFormat(this.context)));
             family.setGender(cursor.getString(cursor.getColumnIndex("gender")));
             family.setProfilePicture(cursor.getBlob(cursor.getColumnIndex("profilePicture")));
             family.setColor(cursor.getInt(cursor.getColumnIndex("color")));

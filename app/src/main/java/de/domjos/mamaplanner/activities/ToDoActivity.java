@@ -66,7 +66,7 @@ public final class ToDoActivity extends AbstractActivity {
             }
             if(id==0L) {
                 this.toDoList = new CalendarToDoList();
-                this.toDoList.setCalendar(Converter.convertStringToDate(date, Global.getDateFormat()));
+                this.toDoList.setCalendar(Converter.convertStringToDate(date, Global.getDateFormat(getApplicationContext())));
                 if(!this.getIntent().getBooleanExtra(MainActivity.WHOLE_DAY, true)) {
                     Calendar end = (Calendar) this.toDoList.getCalendar().clone();
                     end.add(Calendar.HOUR_OF_DAY, 1);
@@ -189,7 +189,7 @@ public final class ToDoActivity extends AbstractActivity {
             this.txtToDoDescription.setText(this.toDoList.getDescription());
             this.txtToDoCategory.setText(this.toDoList.getCategory());
             if(this.toDoList.getCalendar() != null) {
-                this.txtToDoDeadline.setText(Converter.convertDateToString(this.toDoList.getCalendar().getTime(), Global.getDateFormat().split(" ")[0]));
+                this.txtToDoDeadline.setText(Converter.convertDateToString(this.toDoList.getCalendar().getTime(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
             }
 
             for(int i = 0; i<=this.toDoList.getToDos().size() - 1; i++) {
@@ -231,7 +231,7 @@ public final class ToDoActivity extends AbstractActivity {
             this.toDoList.setDescription(this.txtToDoDescription.getText().toString());
             this.toDoList.setCategory(this.txtToDoCategory.getText().toString());
             if(!this.txtToDoDeadline.getText().toString().isEmpty()) {
-                this.toDoList.setCalendar(Converter.convertStringToDate(this.txtToDoDeadline.getText().toString(), Global.getDateFormat().split(" ")[0]));
+                this.toDoList.setCalendar(Converter.convertStringToDate(this.txtToDoDeadline.getText().toString(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
             }
 
             this.toDoList.getToDos().clear();

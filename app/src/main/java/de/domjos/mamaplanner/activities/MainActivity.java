@@ -243,7 +243,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                         } else {
                             intent.putExtra("FAMILY", 0);
                         }
-                        intent.putExtra("DT", Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat()));
+                        intent.putExtra("DT", Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
                         intent.putExtra("wholeDay", false);
                         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                     }
@@ -285,7 +285,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                         } else {
                             intent.putExtra("FAMILY", 0);
                         }
-                        intent.putExtra("DT", Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat()));
+                        intent.putExtra("DT", Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
                         intent.putExtra("wholeDay", false);
                         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                     }
@@ -381,9 +381,9 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             intent.putExtra(MainActivity.FAMILY, 0);
         }
         if(event!=null) {
-            intent.putExtra(MainActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat()));
+            intent.putExtra(MainActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
         } else {
-            intent.putExtra(MainActivity.DATE, Converter.convertDateToString(new Date(), Global.getDateFormat()));
+            intent.putExtra(MainActivity.DATE, Converter.convertDateToString(new Date(), Global.getDateFormat(getApplicationContext())));
         }
         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
     }
@@ -426,7 +426,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 }
             }
         }
-        intent.putExtra(MainActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat()));
+        intent.putExtra(MainActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
         intent.putExtra(MainActivity.WHOLE_DAY, wholeDay);
         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
     }
