@@ -18,6 +18,7 @@
 
 package de.domjos.mamaplanner.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,6 +30,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.settings.Global;
 
@@ -97,6 +99,13 @@ public class Validator {
     public boolean getState() {
         for(Boolean state : this.states.values()) {
             if(!state) {
+                if(this.context instanceof Activity) {
+                    ((Activity) this.context).runOnUiThread(() ->
+                        MessageHelper.printMessage(this.context.getString(R.string.validator_no_success), this.context)
+                    );
+                } else {
+                    MessageHelper.printMessage(this.context.getString(R.string.validator_no_success), this.context);
+                }
                 return false;
             }
         }

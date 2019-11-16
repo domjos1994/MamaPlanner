@@ -76,9 +76,8 @@
     <string name="sys_cancel">Abbrechen</string>
     <string name="sys_save">Speichern</string>
 
-    <string name="validator_empty" formatted="false">Field \'%s\' is a required field!</string>
-    <string name="validator_duplicated" formatted="false">Value \'%s\' of the field \'%s\' is already in use!</string>
-    <string name="validator_matches" formatted="false">Field \'%s\' contains invalid characters!</string>
-    <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date!</string>
-    <string name="validator_no_success">"Fields are not valid! "</string>
+    <string name="validator_empty" formatted="false">Feld \'%s\' ist ein Pflichtfeld!</string>
+    <string name="validator_matches" formatted="false">Feld \'%s\' beinhaltet unerlaubte Zeichen!</string>
+    <string name="validator_noDate" formatted="false">Feld \'%s\' enthält kein zulässifges Datum!</string>
+    <string name="validator_no_success">Eingaben sind nicht zulässig!</string>
 </resources>
