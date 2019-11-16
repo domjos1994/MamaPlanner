@@ -483,8 +483,14 @@ public class WidgetCalendar extends LinearLayout {
             int day = calendar.get(Calendar.DAY_OF_WEEK);
             int max = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-            for(int i = day-1; i>0; i--) {
-                ((TableRow) this.tableLayout.getChildAt(1)).addView(this.addTextView(""));
+            if(day != 1)  {
+                for(int i = day-1; i>0; i--) {
+                    ((TableRow) this.tableLayout.getChildAt(1)).addView(this.addTextView(""));
+                }
+            } else {
+                for(int i = day-1; i>0; i--) {
+                    ((TableRow) this.tableLayout.getChildAt(2)).addView(this.addTextView(""));
+                }
             }
 
             for(int i = 1; i<=max; i++) {
