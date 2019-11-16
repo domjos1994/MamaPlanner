@@ -18,11 +18,10 @@
 
 package de.domjos.mamaplanner.activities;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
+import android.os.Bundle;
+import androidx.preference.PreferenceFragmentCompat;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.mamaplanner.R;
-import de.domjos.mamaplanner.fragments.PreferenceFragment;
 
 public final class SettingsActivity extends AbstractActivity {
 
@@ -38,5 +37,12 @@ public final class SettingsActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         getSupportFragmentManager().beginTransaction().replace(R.id.llMain, new PreferenceFragment()).commit();
+    }
+
+    public static class PreferenceFragment extends PreferenceFragmentCompat {
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            this.addPreferencesFromResource(R.xml.app_preferences);
+        }
     }
 }
