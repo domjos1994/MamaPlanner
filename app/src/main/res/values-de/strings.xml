@@ -61,13 +61,13 @@
     <string name="app_family_picture">Bild</string>
 
     <string name="events_examinations">Vorsorge-Untersuchungen</string>
-    <string name="events_vaccinations">Impfungen</string>
-    <string name="events_vaccinations_1">1. Impfungen</string>
-    <string name="events_vaccinations_2">2. Impfungen</string>
-    <string name="events_vaccinations_3">3. Impfungen</string>
-    <string name="events_vaccinations_4">4. Impfungen</string>
-    <string name="events_vaccinations_5">5. Impfungen</string>
-    <string name="events_vaccinations_6">6. Impfungen</string>
+    <string name="events_vaccinations">Impfungen von %s</string>
+    <string name="events_vaccinations_1">1. Impfungen von %s</string>
+    <string name="events_vaccinations_2">2. Impfungen von %s</string>
+    <string name="events_vaccinations_3">3. Impfungen von %s</string>
+    <string name="events_vaccinations_4">4. Impfungen von %s</string>
+    <string name="events_vaccinations_5">5. Impfungen von %s</string>
+    <string name="events_vaccinations_6">6. Impfungen von %s</string>
 
     <string name="app_menu_settings">Einstellungen</string>
 

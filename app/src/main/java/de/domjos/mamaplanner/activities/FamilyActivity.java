@@ -276,7 +276,7 @@ public final class FamilyActivity extends AbstractActivity {
         }
     }
 
-
+    @SuppressWarnings("deprecation")
     private void objectToFields() {
         try {
             this.txtFamilyFirstName.setText(this.currentFamily.getFirstName());
@@ -362,6 +362,7 @@ public final class FamilyActivity extends AbstractActivity {
         startActivityForResult(photoPickerIntent, REQUEST_IMAGE_FROM_GALLERY);
     }
 
+    @SuppressWarnings("deprecation")
     private void getImageFromGallery(Intent data) throws Exception {
         Uri selectedImage = data.getData();
         if(selectedImage != null) {

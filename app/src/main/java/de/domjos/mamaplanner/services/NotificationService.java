@@ -44,6 +44,7 @@ public class NotificationService extends IntentService {
                         todayEvents.add(calendarEvent);
                     }
                 }
+                MainActivity.GLOBAL.getSqLite().deleteItem(calendarEvent);
             }
 
             for(CalendarEvent todayEvent : todayEvents) {

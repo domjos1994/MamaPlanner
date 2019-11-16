@@ -63,13 +63,13 @@
     <string name="app_family_picture">Picture</string>
 
     <string name="events_examinations">Screening tests</string>
-    <string name="events_vaccinations">Vaccinations</string>
-    <string name="events_vaccinations_1">1. Vaccinations</string>
-    <string name="events_vaccinations_2">2. Vaccinations</string>
-    <string name="events_vaccinations_3">3. Vaccinations</string>
-    <string name="events_vaccinations_4">4. Vaccinations</string>
-    <string name="events_vaccinations_5">5. Vaccinations</string>
-    <string name="events_vaccinations_6">6. Vaccinations</string>
+    <string name="events_vaccinations">Vaccinations of %s</string>
+    <string name="events_vaccinations_1">1. Vaccinations of %s</string>
+    <string name="events_vaccinations_2">2. Vaccinations of %s</string>
+    <string name="events_vaccinations_3">3. Vaccinations of %s</string>
+    <string name="events_vaccinations_4">4. Vaccinations of %s</string>
+    <string name="events_vaccinations_5">5. Vaccinations of %s</string>
+    <string name="events_vaccinations_6">6. Vaccinations of %s</string>
 
     <string name="app_menu_settings">Settings</string>
 

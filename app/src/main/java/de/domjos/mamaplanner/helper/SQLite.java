@@ -138,8 +138,12 @@ public class SQLite extends SQLiteOpenHelper {
 
         Calendar tmpCalendar = calendar;
         CalendarEvent calendarEvent = new CalendarEvent();
-        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
-        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_1));
+        calendarEvent.setName(
+            String.format(this.context.getString(R.string.events_vaccinations), family.getFirstName())
+        );
+        calendarEvent.setDescription(
+            String.format(this.context.getString(R.string.events_vaccinations_1), family.getFirstName())
+        );
         tmpCalendar.add(Calendar.WEEK_OF_YEAR, 6);
         calendarEvent.setCalendar(tmpCalendar.getTime());
         calendarEvent.setSystem(true);
@@ -147,8 +151,12 @@ public class SQLite extends SQLiteOpenHelper {
 
         tmpCalendar = calendar;
         calendarEvent = new CalendarEvent();
-        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
-        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_2));
+        calendarEvent.setName(
+            String.format(this.context.getString(R.string.events_vaccinations), family.getFirstName())
+        );
+        calendarEvent.setDescription(
+            String.format(this.context.getString(R.string.events_vaccinations_2), family.getFirstName())
+        );
         tmpCalendar.add(Calendar.MONTH, 2);
         calendarEvent.setCalendar(tmpCalendar.getTime());
         calendarEvent.setSystem(true);
@@ -156,8 +164,12 @@ public class SQLite extends SQLiteOpenHelper {
 
         tmpCalendar = calendar;
         calendarEvent = new CalendarEvent();
-        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
-        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_3));
+        calendarEvent.setName(
+            String.format(this.context.getString(R.string.events_vaccinations), family.getFirstName())
+        );
+        calendarEvent.setDescription(
+            String.format(this.context.getString(R.string.events_vaccinations_3), family.getFirstName())
+        );
         tmpCalendar.add(Calendar.MONTH, 3);
         calendarEvent.setCalendar(tmpCalendar.getTime());
         calendarEvent.setSystem(true);
@@ -165,8 +177,12 @@ public class SQLite extends SQLiteOpenHelper {
 
         tmpCalendar = calendar;
         calendarEvent = new CalendarEvent();
-        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
-        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_4));
+        calendarEvent.setName(
+            String.format(this.context.getString(R.string.events_vaccinations), family.getFirstName())
+        );
+        calendarEvent.setDescription(
+            String.format(this.context.getString(R.string.events_vaccinations_4), family.getFirstName())
+        );
         tmpCalendar.add(Calendar.MONTH, 4);
         calendarEvent.setCalendar(tmpCalendar.getTime());
         calendarEvent.setSystem(true);
@@ -174,8 +190,12 @@ public class SQLite extends SQLiteOpenHelper {
 
         tmpCalendar = calendar;
         calendarEvent = new CalendarEvent();
-        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
-        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_5));
+        calendarEvent.setName(
+            String.format(this.context.getString(R.string.events_vaccinations), family.getFirstName())
+        );
+        calendarEvent.setDescription(
+            String.format(this.context.getString(R.string.events_vaccinations_5), family.getFirstName())
+        );
         tmpCalendar.add(Calendar.MONTH, 11);
         calendarEvent.setCalendar(tmpCalendar.getTime());
         calendarEvent.setSystem(true);
@@ -183,8 +203,12 @@ public class SQLite extends SQLiteOpenHelper {
 
         tmpCalendar = calendar;
         calendarEvent = new CalendarEvent();
-        calendarEvent.setName(this.context.getString(R.string.events_vaccinations));
-        calendarEvent.setDescription(this.context.getString(R.string.events_vaccinations_6));
+        calendarEvent.setName(
+            String.format(this.context.getString(R.string.events_vaccinations), family.getFirstName())
+        );
+        calendarEvent.setDescription(
+            String.format(this.context.getString(R.string.events_vaccinations_6), family.getFirstName())
+        );
         tmpCalendar.add(Calendar.MONTH, 15);
         calendarEvent.setCalendar(tmpCalendar.getTime());
         calendarEvent.setSystem(true);
