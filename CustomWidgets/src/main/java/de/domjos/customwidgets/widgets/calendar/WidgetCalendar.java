@@ -483,16 +483,6 @@ public class WidgetCalendar extends LinearLayout {
             int day = calendar.get(Calendar.DAY_OF_WEEK);
             int max = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-            if(day != 1)  {
-                for(int i = day-1; i>0; i--) {
-                    ((TableRow) this.tableLayout.getChildAt(1)).addView(this.addTextView(""));
-                }
-            } else {
-                for(int i = day-1; i>0; i--) {
-                    ((TableRow) this.tableLayout.getChildAt(2)).addView(this.addTextView(""));
-                }
-            }
-
             for(int i = 1; i<=max; i++) {
                 calendar.set(Calendar.DAY_OF_MONTH, i);
 
@@ -507,10 +497,21 @@ public class WidgetCalendar extends LinearLayout {
             if(Global.getLocale().getLanguage().equals(Locale.GERMAN.getLanguage())) {
                 weeks++;
             }
+
             int children = ((TableRow) this.tableLayout.getChildAt(weeks)).getChildCount();
             for(int i = children; i<7; i++) {
                 ((TableRow) this.tableLayout.getChildAt(weeks)).addView(this.addTextView(""));
             }
+
+            if(((TableRow) this.tableLayout.getChildAt(1)).getChildCount() == 0) {
+                this.tableLayout.removeView(this.tableLayout.getChildAt(1));
+            }
+
+            int position = 0;
+            for(int i = day-1; i>0; i--) {
+                ((TableRow) this.tableLayout.getChildAt(1)).addView(this.addTextView(""), position);
+            }
+
             this.tableLayout.invalidate();
         } catch (Exception ex) {
             MessageHelper.printException(ex, this.context);
