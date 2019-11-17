@@ -31,10 +31,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -61,6 +58,7 @@ public final class FamilyActivity extends AbstractActivity {
 
     private EditText txtFamilyFirstName, txtFamilyLastName, txtFamilyBirthDate;
     private TextView lblFamilyColor;
+    private Button cmdFamilyColor;
     private Spinner spFamilyGender;
     private ImageButton cmdFamilyCamera, cmdFamilyGallery;
 
@@ -105,7 +103,7 @@ public final class FamilyActivity extends AbstractActivity {
             }
         });
 
-        this.lblFamilyColor.setOnClickListener(view -> {
+        this.cmdFamilyColor.setOnClickListener(view -> {
             ColorChooserDialog cp = new ColorChooserDialog(FamilyActivity.this);
             cp.setColorListener((v, color) -> this.lblFamilyColor.setBackgroundColor(color));
             cp.show();
@@ -148,6 +146,7 @@ public final class FamilyActivity extends AbstractActivity {
         this.txtFamilyBirthDate = this.findViewById(R.id.txtFamilyBirthDate);
 
         this.lblFamilyColor = this.findViewById(R.id.lblFamilyColor);
+        this.cmdFamilyColor = this.findViewById(R.id.cmdFamilyColor);
 
         this.spFamilyGender = this.findViewById(R.id.spFamilyGender);
 
@@ -210,6 +209,7 @@ public final class FamilyActivity extends AbstractActivity {
         this.txtFamilyFirstName.setEnabled(editMode);
         this.txtFamilyLastName.setEnabled(editMode);
         this.txtFamilyBirthDate.setEnabled(editMode);
+        this.cmdFamilyColor.setEnabled(editMode);
         this.spFamilyGender.setEnabled(editMode);
         this.cmdFamilyCamera.setEnabled(editMode);
         this.cmdFamilyGallery.setEnabled(editMode);
