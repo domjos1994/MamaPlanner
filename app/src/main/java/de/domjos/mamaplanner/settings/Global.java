@@ -66,7 +66,14 @@ public class Global {
         this.sqLite = sqLite;
     }
 
-    private static String getSettingFromPreference(String key, String def, Context context) {
+    public static void setSettingToPreference(String key, String value, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getPackageName(), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    public static String getSettingFromPreference(String key, String def, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getPackageName(), MODE_PRIVATE);
         return sharedPreferences.getString(key, def);
     }

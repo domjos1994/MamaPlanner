@@ -26,6 +26,11 @@
         android:title="@string/app_family"
         android:icon="@drawable/ic_family"/>
 
+    <item
+        android:id="@+id/navAppSync"
+        android:title="@string/app_sync"
+        android:icon="@drawable/ic_sync_black_24dp"/>
+
     <item android:title="@string/app_navigation_view">
         <menu>
             <item

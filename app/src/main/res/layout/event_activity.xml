@@ -94,20 +94,24 @@
                         </TableRow>
 
                         <EditText
-                                android:id="@+id/txtEventName"
-                                android:hint="@string/app_event_name"
-                                android:inputType="text"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="10"/>
+                            android:id="@+id/txtEventName"
+                            android:hint="@string/app_event_name"
+                            android:inputType="text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="10"
+                            android:autofillHints="@string/app_name"
+                            tools:targetApi="o" />
 
                         <EditText
-                                android:id="@+id/txtEventDescription"
-                                android:hint="@string/app_event_description"
-                                android:inputType="textMultiLine"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="5"/>
+                            android:id="@+id/txtEventDescription"
+                            android:hint="@string/app_event_description"
+                            android:inputType="textMultiLine"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="10"
+                            android:autofillHints="@string/app_name"
+                            tools:targetApi="o"/>
                     </TableLayout>
                 </ScrollView>
                 <ScrollView
@@ -121,143 +125,203 @@
                             android:weightSum="3">
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                         <TableRow>
                             <EditText
-                                    android:hint="@string/notifications_months"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_months"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_days"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_days"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                             <EditText
-                                    android:hint="@string/notifications_hours"
-                                    android:inputType="numberSigned"
-                                    android:layout_weight="1"/>
+                                android:hint="@string/notifications_hours"
+                                android:inputType="numberSigned"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/app_name"
+                                tools:targetApi="o"/>
                         </TableRow>
                     </TableLayout>
                 </ScrollView>

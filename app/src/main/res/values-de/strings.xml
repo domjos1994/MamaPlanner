@@ -62,6 +62,20 @@
     </string-array>
     <string name="app_family_picture">Bild</string>
 
+    <string name="app_sync">Synchronisation</string>
+    <string name="app_sync_type">Typ</string>
+    <string-array name="app_sync_types">
+        <item>Google</item>
+        <item>Yahoo</item>
+        <item>Benutzerdefiniert</item>
+    </string-array>
+    <string name="app_sync_host">Server-URL</string>
+    <string name="app_sync_base">Basis</string>
+    <string name="app_sync_user">Benutzer-Name</string>
+    <string name="app_sync_pwd">Passwort</string>
+    <string name="app_sync_success">Verbindung erfolgreich!</string>
+    <string name="app_sync_no_success">Verbindung nicht erfolgreich!</string>
+
     <string name="events_examinations">Vorsorge-Untersuchungen</string>
     <string name="events_vaccinations">Impfungen von %s</string>
     <string name="events_vaccinations_1">1. Impfungen von %s</string>

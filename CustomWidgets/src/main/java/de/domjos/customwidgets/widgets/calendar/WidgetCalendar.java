@@ -723,7 +723,8 @@ public class WidgetCalendar extends LinearLayout {
         }
     }
 
-    public abstract static class ClickListener {
-        public abstract void onClick(Event event);
+    @FunctionalInterface
+    public interface ClickListener {
+        void onClick(Event event);
     }
 }
