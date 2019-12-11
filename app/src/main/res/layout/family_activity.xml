@@ -26,13 +26,14 @@
     tools:context=".activities.FamilyActivity"
     android:background="@color/colorAccent">
 
-    <de.domjos.customwidgets.widgets.swiperefreshlist.SwipeRefreshDeleteList
+    <de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList
         android:id="@+id/lvFamily"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_above="@+id/tblControls"
         android:layout_alignParentTop="true"
-        android:padding="5dp"/>
+        android:padding="5dp"
+        app:itemIcon="@drawable/ic_family"/>
 
     <ScrollView
         android:id="@+id/tblControls"

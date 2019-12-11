@@ -20,6 +20,7 @@ package de.domjos.mamaplanner.model.family;
 
 import java.util.Date;
 
+import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.mamaplanner.model.objects.IDatabaseObject;
 
 public final class Family implements IDatabaseObject {

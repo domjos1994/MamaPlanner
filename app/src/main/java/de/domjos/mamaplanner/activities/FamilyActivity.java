@@ -42,11 +42,11 @@ import com.turkialkhateeb.materialcolorpicker.ColorChooserDialog;
 import java.util.Calendar;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.ListObject;
+import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.Converter;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.WidgetUtils;
-import de.domjos.customwidgets.widgets.swiperefreshlist.SwipeRefreshDeleteList;
+import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.helper.Validator;
 import de.domjos.mamaplanner.model.family.Family;
@@ -85,21 +85,27 @@ public final class FamilyActivity extends AbstractActivity {
 
         this.lvFamily.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onClick(ListObject listObject) {
-                Object object = listObject.getObject();
-                currentFamily = (Family) object;
-                objectToFields();
-                manageControls(false, false, true);
+            public void onClick(BaseDescriptionObject listObject) {
+                try {
+                    currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("ID=" + listObject.getID()).get(0);
+                    objectToFields();
+                    manageControls(false, false, true);
+                } catch (Exception ex) {
+                    MessageHelper.printException(ex, FamilyActivity.this);
+                }
             }
         });
 
-        this.lvFamily.delete(new SwipeRefreshDeleteList.DeleteListener() {
+        this.lvFamily.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
             @Override
-            public void onDelete(ListObject listObject) {
-                Object object = listObject.getObject();
-                currentFamily = (Family) object;
-                MainActivity.GLOBAL.getSqLite().deleteItem(currentFamily);
-                manageControls(false, true, false);
+            public void onDelete(BaseDescriptionObject listObject) {
+                try {
+                    currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("ID=" + listObject.getID()).get(0);
+                    MainActivity.GLOBAL.getSqLite().deleteItem(currentFamily);
+                    manageControls(false, true, false);
+                } catch (Exception ex) {
+                    MessageHelper.printException(ex, FamilyActivity.this);
+                }
             }
         });
 
@@ -188,15 +194,10 @@ public final class FamilyActivity extends AbstractActivity {
         try {
             this.lvFamily.getAdapter().clear();
             for(Family family : MainActivity.GLOBAL.getSqLite().getFamily("")) {
-                ListObject<Family> listObject;
-                if(family.getProfilePicture()!=null) {
-                    listObject = new ListObject<>(FamilyActivity.this, family.getProfilePicture());
-                } else {
-                    listObject = new ListObject<>(FamilyActivity.this, R.mipmap.ic_launcher_round);
-                }
+                BaseDescriptionObject listObject = new BaseDescriptionObject();
                 listObject.setTitle(String.format("%s %s", family.getFirstName(), family.getLastName()));
-                listObject.setSubTitle(Converter.convertDateToString(family.getBirthDate(), Global.getDateFormat(getApplicationContext())));
-                listObject.setObject(family);
+                listObject.setID((int) family.getID());
+                listObject.setDescription(Converter.convertDateToString(family.getBirthDate(), Global.getDateFormat(getApplicationContext())));
                 this.lvFamily.getAdapter().add(listObject);
             }
         } catch (Exception ex) {
@@ -228,7 +229,7 @@ public final class FamilyActivity extends AbstractActivity {
     }
 
     @Override
-    public void initValidators() {
+    public void initValidator() {
         this.familyValidator = new Validator(FamilyActivity.this);
         this.familyValidator.addEmptyValidator(this.txtFamilyFirstName);
         this.familyValidator.addEmptyValidator(this.txtFamilyBirthDate);

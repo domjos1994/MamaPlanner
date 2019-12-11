@@ -113,7 +113,7 @@ public final class ToDoActivity extends AbstractActivity {
     }
 
     @Override
-    public void initValidators() {
+    public void initValidator() {
         this.toDoValidator = new Validator(this.getApplicationContext());
         this.toDoValidator.addEmptyValidator(this.txtToDoTitle);
         this.toDoValidator.addEmptyValidator(this.txtToDoDeadline);

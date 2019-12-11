@@ -148,7 +148,7 @@ public final class EventActivity extends AbstractActivity {
     }
 
     @Override
-    public void initValidators() {
+    public void initValidator() {
         this.eventValidator = new Validator(this.getApplicationContext());
         this.eventValidator.addEmptyValidator(this.txtEventName);
         this.eventValidator.addEmptyValidator(this.txtEventDescription);

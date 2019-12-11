@@ -20,7 +20,7 @@
 // define Variables
 ext.javaLevel = "8"
 ext.androidVersion = 29
-ext.androidMinVersion = 15
+ext.androidMinVersion = 20
 ext.androidBuildVersion = "29.0.2"
 
 ext.projectVersion = 9

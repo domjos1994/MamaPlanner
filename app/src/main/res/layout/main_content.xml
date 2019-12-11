@@ -31,5 +31,10 @@
         android:id="@+id/calApp"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:groupLabelWidth="150dp"
+        app:toolBarBackground="@color/colorAccent"
+        app:monthViewBackground="@color/colorPrimary"
+        app:dayViewBackground="@color/colorPrimaryDark"
+        app:focusBackground="@color/colorAccent"/>
 </LinearLayout>
