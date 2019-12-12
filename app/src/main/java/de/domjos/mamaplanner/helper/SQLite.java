@@ -62,7 +62,7 @@ public class SQLite extends SQLiteOpenHelper {
                 sqLiteDatabase.execSQL(query.trim());
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, this.context);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -85,7 +85,7 @@ public class SQLite extends SQLiteOpenHelper {
             oldVersion = this.update1(oldVersion, sqLiteDatabase);
             this.update2(oldVersion, sqLiteDatabase);
         } catch (Exception ex) {
-            MessageHelper.printException(ex, this.context);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 

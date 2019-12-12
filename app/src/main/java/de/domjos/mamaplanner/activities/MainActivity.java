@@ -100,7 +100,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 Event event = this.calApp.getCurrentEvent();
                 this.startActivity(event, EventActivity.class);
             } catch (Exception ex) {
-                MessageHelper.printException(ex, MainActivity.this);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
             }
         });
 
@@ -109,7 +109,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 Event event = this.calApp.getCurrentEvent();
                 this.startActivity(event, ToDoActivity.class);
             } catch (Exception ex) {
-                MessageHelper.printException(ex, MainActivity.this);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
             }
         });
 
@@ -153,7 +153,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     MainActivity.this.startActivity(event, null, true, ToDoActivity.class);
                 }
             } catch (Exception ex) {
-                MessageHelper.printException(ex, MainActivity.this);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
             }
         });
 
@@ -169,7 +169,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     reloadEvents();
                 }
             } catch (Exception ex) {
-                MessageHelper.printException(ex, MainActivity.this);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
             }
         });
 
@@ -193,7 +193,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                 }
             } catch (Exception ex) {
-                MessageHelper.printException(ex, MainActivity.this);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
             }
         });
 
@@ -233,7 +233,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                 }
             } catch (Exception ex) {
-                MessageHelper.printException(ex, MainActivity.this);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
             }
         });
     }
@@ -307,7 +307,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             this.spAppHeaderFamily.setSelection(0);
             this.reloadEvents();
         } catch (Exception ex) {
-            MessageHelper.printException(ex, MainActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
         }
     }
 
@@ -478,7 +478,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
             this.calApp.reload();
         } catch (Exception ex) {
-            MessageHelper.printException(ex, MainActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
         }
     }
 }

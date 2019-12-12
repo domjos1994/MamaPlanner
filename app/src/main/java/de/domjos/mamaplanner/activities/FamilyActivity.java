@@ -91,7 +91,7 @@ public final class FamilyActivity extends AbstractActivity {
                     objectToFields();
                     manageControls(false, false, true);
                 } catch (Exception ex) {
-                    MessageHelper.printException(ex, FamilyActivity.this);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
                 }
             }
         });
@@ -104,7 +104,7 @@ public final class FamilyActivity extends AbstractActivity {
                     MainActivity.GLOBAL.getSqLite().deleteItem(currentFamily);
                     manageControls(false, true, false);
                 } catch (Exception ex) {
-                    MessageHelper.printException(ex, FamilyActivity.this);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
                 }
             }
         });
@@ -134,7 +134,7 @@ public final class FamilyActivity extends AbstractActivity {
                         calendar.set(Calendar.DAY_OF_MONTH, i2);
                         txtFamilyBirthDate.setText(Converter.convertDateToString(calendar.getTime(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
                     } catch (Exception ex) {
-                        MessageHelper.printException(ex, FamilyActivity.this);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
                     }
                 });
                 datePickerDialog.show();
@@ -180,7 +180,7 @@ public final class FamilyActivity extends AbstractActivity {
                             MainActivity.GLOBAL.getSqLite().insertOrUpdateFamily(this.currentFamily);
                             this.manageControls(false, true, false);
                         } catch (Exception ex) {
-                            MessageHelper.printException(ex, FamilyActivity.this);
+                            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
                         }
                     }
                     break;
@@ -201,7 +201,7 @@ public final class FamilyActivity extends AbstractActivity {
                 this.lvFamily.getAdapter().add(listObject);
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, FamilyActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
         }
     }
 
@@ -264,7 +264,7 @@ public final class FamilyActivity extends AbstractActivity {
                 }
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, FamilyActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
         }
     }
 
@@ -318,7 +318,7 @@ public final class FamilyActivity extends AbstractActivity {
                 this.lblFamilyColor.setBackgroundColor(this.currentFamily.getColor());
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, FamilyActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
         }
     }
 
@@ -346,7 +346,7 @@ public final class FamilyActivity extends AbstractActivity {
                 this.currentFamily.setColor(((ColorDrawable) lblFamilyColor.getBackground()).getColor());
             } catch (Exception ignored) {}
         } catch (Exception ex) {
-            MessageHelper.printException(ex, FamilyActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
         }
     }
 

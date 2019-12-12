@@ -101,10 +101,10 @@ public class Validator {
             if(!state) {
                 if(this.context instanceof Activity) {
                     ((Activity) this.context).runOnUiThread(() ->
-                        MessageHelper.printMessage(this.context.getString(R.string.validator_no_success), this.context)
+                        MessageHelper.printMessage(this.context.getString(R.string.validator_no_success), R.mipmap.ic_launcher_round, this.context)
                     );
                 } else {
-                    MessageHelper.printMessage(this.context.getString(R.string.validator_no_success), this.context);
+                    MessageHelper.printMessage(this.context.getString(R.string.validator_no_success), R.mipmap.ic_launcher_round, this.context);
                 }
                 return false;
             }

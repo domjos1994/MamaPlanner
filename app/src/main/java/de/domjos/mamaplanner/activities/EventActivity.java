@@ -126,7 +126,7 @@ public final class EventActivity extends AbstractActivity {
             this.tblNotifications = this.findViewById(R.id.tblNotifications);
             this.objectToFields();
         } catch (Exception ex) {
-            MessageHelper.printException(ex, EventActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, EventActivity.this);
         }
     }
 
@@ -243,7 +243,7 @@ public final class EventActivity extends AbstractActivity {
                 }
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, EventActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, EventActivity.this);
         }
     }
 }

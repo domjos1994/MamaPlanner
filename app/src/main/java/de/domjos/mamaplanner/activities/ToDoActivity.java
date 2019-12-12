@@ -108,7 +108,7 @@ public final class ToDoActivity extends AbstractActivity {
             this.addTableRow();
             this.objectToFields();
         } catch (Exception ex) {
-            MessageHelper.printException(ex, ToDoActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoActivity.this);
         }
     }
 
@@ -217,7 +217,7 @@ public final class ToDoActivity extends AbstractActivity {
                 this.findViewById(android.R.id.tabs).setBackgroundColor(this.currentFamily.getColor());
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, ToDoActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoActivity.this);
         }
     }
 
@@ -261,7 +261,7 @@ public final class ToDoActivity extends AbstractActivity {
                 }
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, ToDoActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoActivity.this);
         }
     }
 }
