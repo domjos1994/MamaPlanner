@@ -33,7 +33,10 @@
         android:layout_above="@+id/tblControls"
         android:layout_alignParentTop="true"
         android:padding="5dp"
-        app:itemIcon="@drawable/ic_family"/>
+        app:itemIcon="@drawable/ic_family"
+        app:listItemBackground="@color/colorPrimary"
+        app:listItemDivider="@color/colorPrimaryDark"
+        app:selectedListItemBackground="@color/colorPrimaryDark"/>
 
     <ScrollView
         android:id="@+id/tblControls"
