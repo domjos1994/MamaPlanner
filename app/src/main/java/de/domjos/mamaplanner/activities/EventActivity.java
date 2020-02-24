@@ -26,7 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.Calendar;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.helper.Validator;
@@ -79,7 +79,7 @@ public final class EventActivity extends AbstractActivity {
             }
             if(id==0L) {
                 this.event = new CalendarEvent();
-                this.event.setCalendar(Converter.convertStringToDate(date, Global.getDateFormat(getApplicationContext())));
+                this.event.setCalendar(ConvertHelper.convertStringToDate(date, Global.getDateFormat(getApplicationContext())));
                 if(!this.getIntent().getBooleanExtra(MainActivity.WHOLE_DAY, true)) {
                     Calendar end = (Calendar) this.event.getCalendar().clone();
                     end.add(Calendar.HOUR_OF_DAY, 1);
@@ -199,7 +199,7 @@ public final class EventActivity extends AbstractActivity {
             if(this.event==null) {
                 this.event = new CalendarEvent();
             }
-            this.event.setCalendar(Converter.convertStringToDate(this.lblEventDate.getText().toString(), Global.getDateFormat(getApplicationContext())));
+            this.event.setCalendar(ConvertHelper.convertStringToDate(this.lblEventDate.getText().toString(), Global.getDateFormat(getApplicationContext())));
             if(this.currentFamily != null) {
                 this.event.setColor(this.currentFamily.getColor());
             }

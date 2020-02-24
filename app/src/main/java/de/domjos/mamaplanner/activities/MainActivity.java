@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.WidgetUtils;
 import de.domjos.customwidgets.widgets.calendar.Event;
@@ -82,7 +82,6 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         super(R.layout.main_activity);
     }
 
-    @SuppressWarnings("deprecation")
     public void initActions() {
         this.fabAppAdd.setOnClickListener(view -> {
             this.showAnimation(this.lblAppEvent, this.fabAppEvent);
@@ -130,7 +129,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                             lblAppHeaderName.setTextColor(family.getColor());
                         }
                     } else {
-                        ivAppHeaderProfile.setImageBitmap(Converter.convertByteArrayToBitmap(family.getProfilePicture()));
+                        ivAppHeaderProfile.setImageBitmap(ConvertHelper.convertByteArrayToBitmap(family.getProfilePicture()));
                         String name = family.getFirstName() + " " + family.getLastName();
                         lblAppHeaderName.setText(name);
                         if(family.getColor() != 0) {
@@ -188,7 +187,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     } else {
                         intent.putExtra(MainActivity.FAMILY, 0);
                     }
-                    intent.putExtra(MainActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
+                    intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
                     intent.putExtra(MainActivity.WHOLE_DAY, false);
                     startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                 }
@@ -228,7 +227,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     } else {
                         intent.putExtra(MainActivity.FAMILY, 0);
                     }
-                    intent.putExtra(MainActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
+                    intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
                     intent.putExtra(MainActivity.WHOLE_DAY, false);
                     startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                 }
@@ -375,7 +374,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         }
     }
 
-    private void startActivity(Event event, Class<? extends Activity> activity) throws Exception {
+    private void startActivity(Event event, Class<? extends Activity> activity) {
         Intent intent = new Intent(this.getApplicationContext(), activity);
         intent.putExtra(MainActivity.ID, 0);
         Family family = (Family) this.spAppHeaderFamily.getSelectedItem();
@@ -385,14 +384,14 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             intent.putExtra(MainActivity.FAMILY, 0);
         }
         if(event!=null) {
-            intent.putExtra(MainActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
+            intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
         } else {
-            intent.putExtra(MainActivity.DATE, Converter.convertDateToString(new Date(), Global.getDateFormat(getApplicationContext())));
+            intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(new Date(), Global.getDateFormat(getApplicationContext())));
         }
         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
     }
 
-    private void startActivity(Event event, Family family, boolean wholeDay, Class<? extends Activity> activity) throws Exception {
+    private void startActivity(Event event, Family family, boolean wholeDay, Class<? extends Activity> activity) {
         Intent intent = new Intent(getApplicationContext(), activity);
         intent.putExtra(MainActivity.ID, ((IDatabaseObject) event).getID());
         if(family == null) {
@@ -430,7 +429,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 }
             }
         }
-        intent.putExtra(MainActivity.DATE, Converter.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
+        intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
         intent.putExtra(MainActivity.WHOLE_DAY, wholeDay);
         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
     }

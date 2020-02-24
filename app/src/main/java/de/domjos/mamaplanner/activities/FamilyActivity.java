@@ -42,8 +42,8 @@ import com.turkialkhateeb.materialcolorpicker.ColorChooserDialog;
 import java.util.Calendar;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.WidgetUtils;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
@@ -76,36 +76,25 @@ public final class FamilyActivity extends AbstractActivity {
     @Override
     protected void initActions() {
 
-        this.lvFamily.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                manageControls(false, true, false);
+        this.lvFamily.setOnReloadListener(()->this.manageControls(false, true, false));
+
+        this.lvFamily.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
+            try {
+                this.currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("ID=" + listObject.getId()).get(0);
+                this.objectToFields();
+                this.manageControls(false, false, true);
+            } catch (Exception ex) {
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
             }
         });
 
-        this.lvFamily.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                try {
-                    currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("ID=" + listObject.getID()).get(0);
-                    objectToFields();
-                    manageControls(false, false, true);
-                } catch (Exception ex) {
-                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
-                }
-            }
-        });
-
-        this.lvFamily.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                try {
-                    currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("ID=" + listObject.getID()).get(0);
-                    MainActivity.GLOBAL.getSqLite().deleteItem(currentFamily);
-                    manageControls(false, true, false);
-                } catch (Exception ex) {
-                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
-                }
+        this.lvFamily.setOnDeleteListener(listObject -> {
+            try {
+                this.currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("ID=" + listObject.getId()).get(0);
+                MainActivity.GLOBAL.getSqLite().deleteItem(currentFamily);
+                this.manageControls(false, true, false);
+            } catch (Exception ex) {
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
             }
         });
 
@@ -121,7 +110,7 @@ public final class FamilyActivity extends AbstractActivity {
                 try {
                     String content = this.txtFamilyBirthDate.getText().toString();
                     Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(Converter.convertStringToDate(content, Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                    calendar.setTime(ConvertHelper.convertStringToDate(content, Global.getDateFormat(getApplicationContext()).split(" ")[0]));
                     int year = calendar.get(Calendar.YEAR), month = calendar.get(Calendar.MONTH),
                             day = calendar.get(Calendar.DAY_OF_MONTH);
                     datePickerDialog.updateDate(year, month, day);
@@ -132,7 +121,7 @@ public final class FamilyActivity extends AbstractActivity {
                         calendar.set(Calendar.YEAR, i);
                         calendar.set(Calendar.MONTH, i1);
                         calendar.set(Calendar.DAY_OF_MONTH, i2);
-                        txtFamilyBirthDate.setText(Converter.convertDateToString(calendar.getTime(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                        txtFamilyBirthDate.setText(ConvertHelper.convertDateToString(calendar.getTime(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
                     } catch (Exception ex) {
                         MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
                     }
@@ -196,8 +185,8 @@ public final class FamilyActivity extends AbstractActivity {
             for(Family family : MainActivity.GLOBAL.getSqLite().getFamily("")) {
                 BaseDescriptionObject listObject = new BaseDescriptionObject();
                 listObject.setTitle(String.format("%s %s", family.getFirstName(), family.getLastName()));
-                listObject.setID((int) family.getID());
-                listObject.setDescription(Converter.convertDateToString(family.getBirthDate(), Global.getDateFormat(getApplicationContext())));
+                listObject.setId(family.getID());
+                listObject.setDescription(ConvertHelper.convertDateToString(family.getBirthDate(), Global.getDateFormat(getApplicationContext())));
                 this.lvFamily.getAdapter().add(listObject);
             }
         } catch (Exception ex) {
@@ -247,7 +236,7 @@ public final class FamilyActivity extends AbstractActivity {
                     if(imageBitmap != null) {
                         this.cmdFamilyCamera.setImageBitmap(imageBitmap);
                         this.cmdFamilyGallery.setImageDrawable(WidgetUtils.getDrawable(FamilyActivity.this, R.drawable.sys_gallery));
-                        this.currentFamily.setProfilePicture(Converter.convertBitmapToByteArray(imageBitmap));
+                        this.currentFamily.setProfilePicture(ConvertHelper.convertBitmapToByteArray(imageBitmap));
                     }
                 }
             }
@@ -277,13 +266,12 @@ public final class FamilyActivity extends AbstractActivity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void objectToFields() {
         try {
             this.txtFamilyFirstName.setText(this.currentFamily.getFirstName());
             this.txtFamilyLastName.setText(this.currentFamily.getLastName());
             if(this.currentFamily.getBirthDate()!=null) {
-                this.txtFamilyBirthDate.setText(Converter.convertDateToString(this.currentFamily.getBirthDate(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                this.txtFamilyBirthDate.setText(ConvertHelper.convertDateToString(this.currentFamily.getBirthDate(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
             } else {
                 this.txtFamilyBirthDate.setText("");
             }
@@ -309,11 +297,7 @@ public final class FamilyActivity extends AbstractActivity {
             this.cmdFamilyGallery.setImageDrawable(WidgetUtils.getDrawable(FamilyActivity.this, R.drawable.sys_gallery));
             this.cmdFamilyCamera.setImageDrawable(WidgetUtils.getDrawable(FamilyActivity.this, R.drawable.sys_camera));
             if(this.currentFamily.getColor()==0) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    this.lblFamilyColor.setBackground(null);
-                } else {
-                    this.lblFamilyColor.setBackgroundDrawable(null);
-                }
+                this.lblFamilyColor.setBackground(null);
             } else {
                 this.lblFamilyColor.setBackgroundColor(this.currentFamily.getColor());
             }
@@ -327,7 +311,7 @@ public final class FamilyActivity extends AbstractActivity {
             this.currentFamily.setFirstName(this.txtFamilyFirstName.getText().toString());
             this.currentFamily.setLastName(this.txtFamilyLastName.getText().toString());
             if(!this.txtFamilyBirthDate.getText().toString().isEmpty()) {
-                this.currentFamily.setBirthDate(Converter.convertStringToDate(this.txtFamilyBirthDate.getText().toString(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                this.currentFamily.setBirthDate(ConvertHelper.convertStringToDate(this.txtFamilyBirthDate.getText().toString(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
             }
             switch (this.spFamilyGender.getSelectedItemPosition()) {
                 case 0:
@@ -363,7 +347,6 @@ public final class FamilyActivity extends AbstractActivity {
         startActivityForResult(photoPickerIntent, REQUEST_IMAGE_FROM_GALLERY);
     }
 
-    @SuppressWarnings("deprecation")
     private void getImageFromGallery(Intent data) throws Exception {
         Uri selectedImage = data.getData();
         if(selectedImage != null) {
@@ -379,7 +362,7 @@ public final class FamilyActivity extends AbstractActivity {
                 if(bitmap != null) {
                     this.cmdFamilyCamera.setImageDrawable(WidgetUtils.getDrawable(FamilyActivity.this, R.drawable.sys_camera));
                     this.cmdFamilyGallery.setImageBitmap(bitmap);
-                    this.currentFamily.setProfilePicture(Converter.convertBitmapToByteArray(bitmap));
+                    this.currentFamily.setProfilePicture(ConvertHelper.convertBitmapToByteArray(bitmap));
                 }
             }
         }
