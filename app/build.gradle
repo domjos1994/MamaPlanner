@@ -65,5 +65,7 @@ dependencies {
     testImplementation "junit:junit:${junitVersion}"
     androidTestImplementation "androidx.test:runner:${junitAndroidVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
-    implementation project(path: ':customwidgets')
+
+    // own libraries
+    implementation 'de.domjos:customwidgets:2.1'
 }
