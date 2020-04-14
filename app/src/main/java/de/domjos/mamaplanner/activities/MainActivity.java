@@ -341,6 +341,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int request_code = -1;
         int id = item.getItemId();
 
         Intent intent = null;
@@ -348,6 +349,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         switch (id) {
             case R.id.navAppFamily:
                 intent = new Intent(MainActivity.this, FamilyActivity.class);
+                request_code = MainActivity.RELOAD_FAMILY;
                 break;
             case R.id.navAppSync:
                 intent = new Intent(MainActivity.this, SyncActivity.class);
@@ -355,7 +357,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         }
 
         if(intent!=null) {
-            this.startActivityForResult(intent, MainActivity.RELOAD_FAMILY);
+            this.startActivityForResult(intent, request_code);
         }
 
         this.drawerLayout.closeDrawer(GravityCompat.START);
@@ -366,10 +368,10 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RELOAD_FAMILY && resultCode == RESULT_OK) {
+        if(requestCode == RELOAD_FAMILY) {
             this.reload();
         }
-        if(requestCode == RELOAD_CALENDAR_EVENT && resultCode == RESULT_OK) {
+        if(requestCode == RELOAD_CALENDAR_EVENT) {
             this.reloadEvents();
         }
     }
