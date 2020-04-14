@@ -28,8 +28,8 @@ import java.util.Calendar;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.mamaplanner.R;
-import de.domjos.mamaplanner.helper.Validator;
 import de.domjos.mamaplanner.model.calendar.CalendarEvent;
 import de.domjos.mamaplanner.model.calendar.Notification;
 import de.domjos.mamaplanner.model.family.Family;
@@ -105,6 +105,8 @@ public final class EventActivity extends AbstractActivity {
                             MainActivity.GLOBAL.getSqLite().insertOrUpdateEvent(this.event, this.currentFamily);
                             setResult(RESULT_OK);
                             finish();
+                        } else {
+                            MessageHelper.printMessage(this.eventValidator.getResult(), R.mipmap.ic_launcher_round, EventActivity.this);
                         }
                         break;
                 }
@@ -149,7 +151,7 @@ public final class EventActivity extends AbstractActivity {
 
     @Override
     public void initValidator() {
-        this.eventValidator = new Validator(this.getApplicationContext());
+        this.eventValidator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.eventValidator.addEmptyValidator(this.txtEventName);
         this.eventValidator.addEmptyValidator(this.txtEventDescription);
     }

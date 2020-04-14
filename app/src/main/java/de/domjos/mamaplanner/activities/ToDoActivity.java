@@ -25,9 +25,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.customwidgets.utils.WidgetUtils;
 import de.domjos.mamaplanner.R;
-import de.domjos.mamaplanner.helper.Validator;
 import de.domjos.mamaplanner.model.calendar.CalendarToDoList;
 import de.domjos.mamaplanner.model.calendar.Notification;
 import de.domjos.mamaplanner.model.calendar.ToDo;
@@ -99,6 +99,8 @@ public final class ToDoActivity extends AbstractActivity {
                             MainActivity.GLOBAL.getSqLite().insertOrUpdateToDoList(this.toDoList, this.currentFamily);
                             setResult(RESULT_OK);
                             finish();
+                        } else {
+                            MessageHelper.printMessage(this.toDoValidator.getResult(), R.mipmap.ic_launcher_round, ToDoActivity.this);
                         }
                         break;
                 }
@@ -114,10 +116,10 @@ public final class ToDoActivity extends AbstractActivity {
 
     @Override
     public void initValidator() {
-        this.toDoValidator = new Validator(this.getApplicationContext());
+        this.toDoValidator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.toDoValidator.addEmptyValidator(this.txtToDoTitle);
         this.toDoValidator.addEmptyValidator(this.txtToDoDeadline);
-        this.toDoValidator.addValueEqualsDate(this.txtToDoDeadline);
+        this.toDoValidator.addDateValidator(this.txtToDoDeadline, Global.getDateFormat(getApplicationContext()).split(" ")[0]);
     }
 
     private void initTabHost() {

@@ -45,10 +45,10 @@ import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.customwidgets.utils.WidgetUtils;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.mamaplanner.R;
-import de.domjos.mamaplanner.helper.Validator;
 import de.domjos.mamaplanner.model.family.Family;
 import de.domjos.mamaplanner.settings.Global;
 
@@ -171,6 +171,8 @@ public final class FamilyActivity extends AbstractActivity {
                         } catch (Exception ex) {
                             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
                         }
+                    } else {
+                        MessageHelper.printMessage(this.familyValidator.getResult(), R.mipmap.ic_launcher_round, FamilyActivity.this);
                     }
                     break;
             }
@@ -219,10 +221,10 @@ public final class FamilyActivity extends AbstractActivity {
 
     @Override
     public void initValidator() {
-        this.familyValidator = new Validator(FamilyActivity.this);
+        this.familyValidator = new Validator(FamilyActivity.this, R.mipmap.ic_launcher_round);
         this.familyValidator.addEmptyValidator(this.txtFamilyFirstName);
         this.familyValidator.addEmptyValidator(this.txtFamilyBirthDate);
-        this.familyValidator.addValueEqualsDate(this.txtFamilyBirthDate);
+        this.familyValidator.addDateValidator(this.txtFamilyBirthDate, Global.getDateFormat(getApplicationContext()).split(" ")[0]);
     }
 
     @Override
