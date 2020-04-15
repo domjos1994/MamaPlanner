@@ -35,6 +35,7 @@ import de.domjos.mamaplanner.model.family.Family;
 import de.domjos.mamaplanner.settings.Global;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public final class ToDoActivity extends AbstractActivity {
     private CalendarToDoList toDoList;
@@ -66,7 +67,7 @@ public final class ToDoActivity extends AbstractActivity {
             }
             if(id==0L) {
                 this.toDoList = new CalendarToDoList();
-                this.toDoList.setCalendar(ConvertHelper.convertStringToDate(date, Global.getDateFormat(getApplicationContext())));
+                this.toDoList.setCalendar(Objects.requireNonNull(ConvertHelper.convertStringToDate(date, Global.getDateTimeFormat(getApplicationContext()))));
                 if(!this.getIntent().getBooleanExtra(MainActivity.WHOLE_DAY, true)) {
                     Calendar end = (Calendar) this.toDoList.getCalendar().clone();
                     end.add(Calendar.HOUR_OF_DAY, 1);
@@ -119,7 +120,7 @@ public final class ToDoActivity extends AbstractActivity {
         this.toDoValidator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.toDoValidator.addEmptyValidator(this.txtToDoTitle);
         this.toDoValidator.addEmptyValidator(this.txtToDoDeadline);
-        this.toDoValidator.addDateValidator(this.txtToDoDeadline, Global.getDateFormat(getApplicationContext()).split(" ")[0]);
+        this.toDoValidator.addDateValidator(this.txtToDoDeadline, Global.getDateFormat(getApplicationContext()));
     }
 
     private void initTabHost() {
@@ -191,7 +192,7 @@ public final class ToDoActivity extends AbstractActivity {
             this.txtToDoDescription.setText(this.toDoList.getDescription());
             this.txtToDoCategory.setText(this.toDoList.getCategory());
             if(this.toDoList.getCalendar() != null) {
-                this.txtToDoDeadline.setText(ConvertHelper.convertDateToString(this.toDoList.getCalendar().getTime(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                this.txtToDoDeadline.setText(ConvertHelper.convertDateToString(this.toDoList.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
             }
 
             for(int i = 0; i<=this.toDoList.getToDos().size() - 1; i++) {
@@ -233,7 +234,7 @@ public final class ToDoActivity extends AbstractActivity {
             this.toDoList.setDescription(this.txtToDoDescription.getText().toString());
             this.toDoList.setCategory(this.txtToDoCategory.getText().toString());
             if(!this.txtToDoDeadline.getText().toString().isEmpty()) {
-                this.toDoList.setCalendar(ConvertHelper.convertStringToDate(this.txtToDoDeadline.getText().toString(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                this.toDoList.setCalendar(ConvertHelper.convertStringToDate(this.txtToDoDeadline.getText().toString(), Global.getDateFormat(getApplicationContext())));
             }
 
             this.toDoList.getToDos().clear();

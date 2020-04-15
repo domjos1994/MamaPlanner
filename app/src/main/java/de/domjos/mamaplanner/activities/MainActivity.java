@@ -44,6 +44,7 @@ import de.domjos.customwidgets.utils.WidgetUtils;
 import de.domjos.customwidgets.widgets.calendar.Event;
 import de.domjos.customwidgets.widgets.calendar.WidgetCalendar;
 import de.domjos.mamaplanner.R;
+import de.domjos.mamaplanner.custom.CustomSpinnerAdapter;
 import de.domjos.mamaplanner.helper.SQLite;
 import de.domjos.mamaplanner.helper.Helper;
 import de.domjos.mamaplanner.model.calendar.CalendarEvent;
@@ -64,7 +65,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private ImageView ivAppHeaderProfile;
     private TextView lblAppHeaderName;
     private Spinner spAppHeaderFamily;
-    private ArrayAdapter<Family> familyArrayAdapter;
+    private CustomSpinnerAdapter<Family> familyArrayAdapter;
 
     public final static Global GLOBAL = new Global();
 
@@ -187,7 +188,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     } else {
                         intent.putExtra(MainActivity.FAMILY, 0);
                     }
-                    intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
+                    intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateTimeFormat(getApplicationContext())));
                     intent.putExtra(MainActivity.WHOLE_DAY, false);
                     startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                 }
@@ -227,7 +228,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     } else {
                         intent.putExtra(MainActivity.FAMILY, 0);
                     }
-                    intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
+                    intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateTimeFormat(getApplicationContext())));
                     intent.putExtra(MainActivity.WHOLE_DAY, false);
                     startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
                 }
@@ -282,7 +283,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         this.ivAppHeaderProfile = navigationView.getHeaderView(0).findViewById(R.id.ivAppProfilePicture);
         this.lblAppHeaderName = navigationView.getHeaderView(0).findViewById(R.id.lblAppFamilyName);
         this.spAppHeaderFamily = navigationView.getHeaderView(0).findViewById(R.id.spAppFamily);
-        this.familyArrayAdapter = new ArrayAdapter<>(MainActivity.this, R.layout.spinner_item);
+        this.familyArrayAdapter = new CustomSpinnerAdapter<>(MainActivity.this);
         this.spAppHeaderFamily.setAdapter(this.familyArrayAdapter);
         this.familyArrayAdapter.notifyDataSetChanged();
 
@@ -431,7 +432,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 }
             }
         }
-        intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateFormat(getApplicationContext())));
+        intent.putExtra(MainActivity.DATE, ConvertHelper.convertDateToString(event.getCalendar().getTime(), Global.getDateTimeFormat(getApplicationContext())));
         intent.putExtra(MainActivity.WHOLE_DAY, wholeDay);
         startActivityForResult(intent, RELOAD_CALENDAR_EVENT);
     }

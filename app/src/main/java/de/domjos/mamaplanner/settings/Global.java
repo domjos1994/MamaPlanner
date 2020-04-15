@@ -23,8 +23,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import java.util.Locale;
-
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.helper.SQLite;
 
@@ -42,20 +40,16 @@ public class Global {
         return 0;
     }
 
-    public static String getDateFormat(Context context) {
-        String dateFormat = Global.getSettingFromPreference(Global.DATE, context.getString(R.string.app_settings_format_date_default), context);
-        String timeFormat = Global.getSettingFromPreference(Global.TIME, context.getString(R.string.app_settings_format_time_default), context);
-
-        return dateFormat + " " + timeFormat;
+    public static String getDateTimeFormat(Context context) {
+        return getDateFormat(context) + " " + getTimeFormat(context);
     }
 
-    public static Locale getLocale() {
-        Locale locale = Locale.getDefault();
-        if(locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
-            return Locale.GERMAN;
-        } else {
-            return Locale.ENGLISH;
-        }
+    private static String getTimeFormat(Context context) {
+        return Global.getSettingFromPreference(Global.TIME, context.getString(R.string.app_settings_format_time_default), context);
+    }
+
+    public static String getDateFormat(Context context) {
+        return Global.getSettingFromPreference(Global.DATE, context.getString(R.string.app_settings_format_date_default), context);
     }
 
     public SQLite getSqLite() {

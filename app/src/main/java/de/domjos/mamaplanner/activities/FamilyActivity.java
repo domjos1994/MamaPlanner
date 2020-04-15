@@ -110,7 +110,7 @@ public final class FamilyActivity extends AbstractActivity {
                 try {
                     String content = this.txtFamilyBirthDate.getText().toString();
                     Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(ConvertHelper.convertStringToDate(content, Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                    calendar.setTime(ConvertHelper.convertStringToDate(content, Global.getDateFormat(getApplicationContext())));
                     int year = calendar.get(Calendar.YEAR), month = calendar.get(Calendar.MONTH),
                             day = calendar.get(Calendar.DAY_OF_MONTH);
                     datePickerDialog.updateDate(year, month, day);
@@ -121,7 +121,7 @@ public final class FamilyActivity extends AbstractActivity {
                         calendar.set(Calendar.YEAR, i);
                         calendar.set(Calendar.MONTH, i1);
                         calendar.set(Calendar.DAY_OF_MONTH, i2);
-                        txtFamilyBirthDate.setText(ConvertHelper.convertDateToString(calendar.getTime(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                        txtFamilyBirthDate.setText(ConvertHelper.convertDateToString(calendar.getTime(), Global.getDateFormat(getApplicationContext())));
                     } catch (Exception ex) {
                         MessageHelper.printException(ex, R.mipmap.ic_launcher_round, FamilyActivity.this);
                     }
@@ -189,7 +189,7 @@ public final class FamilyActivity extends AbstractActivity {
                 BaseDescriptionObject listObject = new BaseDescriptionObject();
                 listObject.setTitle(String.format("%s %s", family.getFirstName(), family.getLastName()));
                 listObject.setId(family.getID());
-                listObject.setDescription(ConvertHelper.convertDateToString(family.getBirthDate(), Global.getDateFormat(getApplicationContext())));
+                listObject.setDescription(ConvertHelper.convertDateToString(family.getBirthDate(), Global.getDateTimeFormat(getApplicationContext())));
                 this.lvFamily.getAdapter().add(listObject);
             }
         } catch (Exception ex) {
@@ -227,7 +227,7 @@ public final class FamilyActivity extends AbstractActivity {
         this.familyValidator.addEmptyValidator(this.txtFamilyFirstName);
         this.familyValidator.addEmptyValidator(this.txtFamilyBirthDate);
         this.familyValidator.addEmptyValidator(this.txtFamilyAlias);
-        this.familyValidator.addDateValidator(this.txtFamilyBirthDate, Global.getDateFormat(getApplicationContext()).split(" ")[0]);
+        this.familyValidator.addDateValidator(this.txtFamilyBirthDate, Global.getDateFormat(getApplicationContext()));
     }
 
     @Override
@@ -277,7 +277,7 @@ public final class FamilyActivity extends AbstractActivity {
             this.txtFamilyLastName.setText(this.currentFamily.getLastName());
             this.txtFamilyAlias.setText(this.currentFamily.getAlias());
             if(this.currentFamily.getBirthDate()!=null) {
-                this.txtFamilyBirthDate.setText(ConvertHelper.convertDateToString(this.currentFamily.getBirthDate(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                this.txtFamilyBirthDate.setText(ConvertHelper.convertDateToString(this.currentFamily.getBirthDate(), Global.getDateFormat(getApplicationContext())));
             } else {
                 this.txtFamilyBirthDate.setText("");
             }
@@ -318,7 +318,7 @@ public final class FamilyActivity extends AbstractActivity {
             this.currentFamily.setLastName(this.txtFamilyLastName.getText().toString());
             this.currentFamily.setAlias(this.txtFamilyAlias.getText().toString());
             if(!this.txtFamilyBirthDate.getText().toString().isEmpty()) {
-                this.currentFamily.setBirthDate(ConvertHelper.convertStringToDate(this.txtFamilyBirthDate.getText().toString(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
+                this.currentFamily.setBirthDate(ConvertHelper.convertStringToDate(this.txtFamilyBirthDate.getText().toString(), Global.getDateFormat(getApplicationContext())));
             }
             switch (this.spFamilyGender.getSelectedItemPosition()) {
                 case 0:

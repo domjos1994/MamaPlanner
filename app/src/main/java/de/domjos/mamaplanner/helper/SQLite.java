@@ -24,15 +24,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
-import java.lang.reflect.Field;
-import java.sql.Types;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.utils.MessageHelper;
@@ -82,54 +78,20 @@ public class SQLite extends SQLiteOpenHelper {
             int oldVersion = i;
 
 
-            oldVersion = this.update1(oldVersion, sqLiteDatabase);
-            oldVersion = this.update2(oldVersion, sqLiteDatabase);
-            this.update13(oldVersion, sqLiteDatabase);
+            oldVersion = SQLiteUpdate.update1(oldVersion, sqLiteDatabase);
+            oldVersion = SQLiteUpdate.update2(oldVersion, sqLiteDatabase);
+            SQLiteUpdate.update13(oldVersion, sqLiteDatabase);
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
-    /**
-     * Update to Version 2 of Database
-     * @param version the old Version
-     * @return the updated Version
-     */
-    private int update1(int version, SQLiteDatabase db) {
-        if(version==1) {
-
-            version++;
-        }
-        return version;
-    }
-
-    /**
-     * Update to Version 3 of Database
-     * @param version the old Version
-     * @return the updated Version
-     */
-    private int update2(int version, SQLiteDatabase db) throws Exception {
-        if(version==2) {
-            this.addColumnIfNotExists(db, "events", "system", Types.TINYINT, 1, "0");
-            version++;
-        }
-        return version;
-    }
-
-    private int update13(int version, SQLiteDatabase db) throws Exception {
-        if(version==13) {
-            this.addColumnIfNotExists(db, "family", "alias", Types.VARCHAR, 5, "");
-            version++;
-        }
-        return version;
-    }
-
-    public void insertOrUpdateFamily(Family family) throws Exception {
+    public void insertOrUpdateFamily(Family family) {
         SQLiteStatement sqLiteStatement = this.getStatement(family, Arrays.asList("firstName", "lastName", "alias", "birthDate", "gender", "profilePicture", "color"));
         sqLiteStatement.bindString(1, family.getFirstName());
         sqLiteStatement.bindString(2, family.getLastName());
         sqLiteStatement.bindString(3, family.getAlias());
-        sqLiteStatement.bindString(4, ConvertHelper.convertDateToString(family.getBirthDate(), Global.getDateFormat(this.context)));
+        sqLiteStatement.bindString(4, ConvertHelper.convertDateToString(family.getBirthDate(), Global.getDateTimeFormat(this.context)));
         sqLiteStatement.bindString(5, family.getGender());
         if(family.getProfilePicture()!=null) {
             sqLiteStatement.bindBlob(6, family.getProfilePicture());
@@ -234,7 +196,7 @@ public class SQLite extends SQLiteOpenHelper {
             family.setFirstName(cursor.getString(cursor.getColumnIndex("firstName")));
             family.setLastName(cursor.getString(cursor.getColumnIndex("lastName")));
             family.setAlias(cursor.getString(cursor.getColumnIndex("alias")));
-            family.setBirthDate(ConvertHelper.convertStringToDate(cursor.getString(cursor.getColumnIndex("birthDate")), Global.getDateFormat(this.context)));
+            family.setBirthDate(ConvertHelper.convertStringToDate(cursor.getString(cursor.getColumnIndex("birthDate")), Global.getDateTimeFormat(this.context)));
             family.setGender(cursor.getString(cursor.getColumnIndex("gender")));
             family.setProfilePicture(cursor.getBlob(cursor.getColumnIndex("profilePicture")));
             family.setColor(cursor.getInt(cursor.getColumnIndex("color")));
@@ -463,48 +425,5 @@ public class SQLite extends SQLiteOpenHelper {
         }
 
         return stringBuilder.substring(0, stringBuilder.lastIndexOf(splitter));
-    }
-
-    private void addColumnIfNotExists(SQLiteDatabase db, String table, String column, int type, int length, String defaultValue) throws Exception {
-        if(this.columnNotExists(db, table, column)) {
-            Map<Integer, String> types = this.getAllJdbcTypeNames();
-            String typeString = types.get(type);
-            if(typeString!=null) {
-                if(typeString.toLowerCase().equals("varchar")) {
-                    typeString += "(" + length + ")";
-                }
-            } else {
-                return;
-            }
-            if(!defaultValue.equals("")) {
-                typeString += " DEFAULT " + defaultValue;
-            }
-
-            db.execSQL(String.format("ALTER TABLE %s ADD COLUMN %s %s", table, column, typeString));
-        }
-    }
-
-    private boolean columnNotExists(SQLiteDatabase db, String table, String column) {
-        boolean exists = false;
-        Cursor cursor = db.rawQuery("PRAGMA table_info(" + table + ")", null);
-        while (cursor.moveToNext()) {
-            if(cursor.getString(1).equals(column)) {
-                exists = true;
-                break;
-            }
-        }
-        cursor.close();
-        return !exists;
-    }
-
-    private Map<Integer, String> getAllJdbcTypeNames() throws  Exception {
-
-        Map<Integer, String> result = new LinkedHashMap<>();
-
-        for (Field field : Types.class.getFields()) {
-            result.put(field.getInt(null), field.getName());
-        }
-
-        return result;
     }
 }

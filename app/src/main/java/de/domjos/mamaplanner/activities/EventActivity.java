@@ -25,6 +25,7 @@ import android.widget.*;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.ConvertHelper;
@@ -32,6 +33,7 @@ import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.Validator;
 import de.domjos.customwidgets.utils.WidgetUtils;
 import de.domjos.mamaplanner.R;
+import de.domjos.mamaplanner.custom.CustomSpinnerAdapter;
 import de.domjos.mamaplanner.model.calendar.CalendarEvent;
 import de.domjos.mamaplanner.model.calendar.Notification;
 import de.domjos.mamaplanner.model.family.Family;
@@ -42,7 +44,7 @@ import static android.view.View.VISIBLE;
 
 public final class EventActivity extends AbstractActivity {
     private Spinner spEventAlias;
-    private ArrayAdapter<String> aliasAdapter;
+    private CustomSpinnerAdapter<String> aliasAdapter;
     private TextView lblEventDate;
     private EditText txtEventName;
     private EditText txtEventDescription;
@@ -78,7 +80,7 @@ public final class EventActivity extends AbstractActivity {
                            currentFamily = null;
                            lblEventDate.setBackgroundColor(WidgetUtils.getColor(getApplicationContext(), android.R.color.transparent));
                        } else {
-                           currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("alias=" + alias).get(0);
+                           currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("alias='" + alias + "'").get(0);
                            lblEventDate.setBackgroundColor(currentFamily.getColor());
                        }
                    }
@@ -97,7 +99,7 @@ public final class EventActivity extends AbstractActivity {
             String date = this.getIntent().getStringExtra(MainActivity.DATE);
             if(id==0L) {
                 this.event = new CalendarEvent();
-                this.event.setCalendar(ConvertHelper.convertStringToDate(date, Global.getDateFormat(getApplicationContext())));
+                this.event.setCalendar(Objects.requireNonNull(ConvertHelper.convertStringToDate(date, Global.getDateFormat(getApplicationContext()))));
                 if(!this.getIntent().getBooleanExtra(MainActivity.WHOLE_DAY, true)) {
                     Calendar end = (Calendar) this.event.getCalendar().clone();
                     end.add(Calendar.HOUR_OF_DAY, 1);
@@ -138,7 +140,7 @@ public final class EventActivity extends AbstractActivity {
             }
 
             this.spEventAlias = this.findViewById(R.id.spEventAlias);
-            this.aliasAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item);
+            this.aliasAdapter = new CustomSpinnerAdapter<>(this.getApplicationContext());
             this.spEventAlias.setAdapter(this.aliasAdapter);
             this.aliasAdapter.notifyDataSetChanged();
             try {
@@ -235,7 +237,7 @@ public final class EventActivity extends AbstractActivity {
             if(this.event==null) {
                 this.event = new CalendarEvent();
             }
-            this.event.setCalendar(ConvertHelper.convertStringToDate(this.lblEventDate.getText().toString(), Global.getDateFormat(getApplicationContext())));
+            this.event.setCalendar(ConvertHelper.convertStringToDate(this.lblEventDate.getText().toString(), Global.getDateTimeFormat(getApplicationContext())));
             if(this.currentFamily != null) {
                 this.event.setColor(this.currentFamily.getColor());
             }
