@@ -19,6 +19,7 @@
 package de.domjos.mamaplanner.activities;
 
 import android.os.Build;
+import android.view.View;
 import android.widget.*;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,6 +30,7 @@ import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.Validator;
+import de.domjos.customwidgets.utils.WidgetUtils;
 import de.domjos.mamaplanner.R;
 import de.domjos.mamaplanner.model.calendar.CalendarEvent;
 import de.domjos.mamaplanner.model.calendar.Notification;
@@ -39,6 +41,8 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public final class EventActivity extends AbstractActivity {
+    private Spinner spEventAlias;
+    private ArrayAdapter<String> aliasAdapter;
     private TextView lblEventDate;
     private EditText txtEventName;
     private EditText txtEventDescription;
@@ -64,6 +68,26 @@ public final class EventActivity extends AbstractActivity {
             this.tpEventEnd.setVisibility(state);
         });
 
+        this.spEventAlias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                try {
+                    String alias = aliasAdapter.getItem(i);
+                   if(alias != null) {
+                       if(alias.trim().isEmpty()) {
+                           currentFamily = null;
+                           lblEventDate.setBackgroundColor(WidgetUtils.getColor(getApplicationContext(), android.R.color.transparent));
+                       } else {
+                           currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("alias=" + alias).get(0);
+                           lblEventDate.setBackgroundColor(currentFamily.getColor());
+                       }
+                   }
+                } catch (Exception ignored) {}
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
     }
 
     @Override
@@ -71,12 +95,6 @@ public final class EventActivity extends AbstractActivity {
         try {
             long id = this.getIntent().getLongExtra(MainActivity.ID, 0);
             String date = this.getIntent().getStringExtra(MainActivity.DATE);
-            long family = this.getIntent().getLongExtra(MainActivity.FAMILY, 0L);
-            if(family==0L) {
-                this.currentFamily = null;
-            } else {
-                this.currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("ID=" + family).get(0);
-            }
             if(id==0L) {
                 this.event = new CalendarEvent();
                 this.event.setCalendar(ConvertHelper.convertStringToDate(date, Global.getDateFormat(getApplicationContext())));
@@ -117,6 +135,22 @@ public final class EventActivity extends AbstractActivity {
             this.lblEventDate.setText(date);
             if(this.currentFamily != null) {
                 this.lblEventDate.setBackgroundColor(this.currentFamily.getColor());
+            }
+
+            this.spEventAlias = this.findViewById(R.id.spEventAlias);
+            this.aliasAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item);
+            this.spEventAlias.setAdapter(this.aliasAdapter);
+            this.aliasAdapter.notifyDataSetChanged();
+            try {
+                this.reloadFamilyMember();
+            } catch (Exception ignored) {}
+            long family = this.getIntent().getLongExtra(MainActivity.FAMILY, 0L);
+            if(family==0L) {
+                this.currentFamily = null;
+                this.spEventAlias.setSelection(this.aliasAdapter.getPosition(""));
+            } else {
+                this.currentFamily = MainActivity.GLOBAL.getSqLite().getFamily("ID=" + family).get(0);
+                this.spEventAlias.setSelection(this.aliasAdapter.getPosition(currentFamily.getAlias()));
             }
 
             this.chkEventWholeDay = this.findViewById(R.id.chkEventWholeDay);
@@ -246,6 +280,14 @@ public final class EventActivity extends AbstractActivity {
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, EventActivity.this);
+        }
+    }
+
+    private void reloadFamilyMember() throws Exception {
+        this.aliasAdapter.clear();
+        this.aliasAdapter.add("");
+        for(Family family : MainActivity.GLOBAL.getSqLite().getFamily("")) {
+            this.aliasAdapter.add(family.getAlias());
         }
     }
 }
