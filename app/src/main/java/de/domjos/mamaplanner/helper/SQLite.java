@@ -83,7 +83,8 @@ public class SQLite extends SQLiteOpenHelper {
 
 
             oldVersion = this.update1(oldVersion, sqLiteDatabase);
-            this.update2(oldVersion, sqLiteDatabase);
+            oldVersion = this.update2(oldVersion, sqLiteDatabase);
+            this.update13(oldVersion, sqLiteDatabase);
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
@@ -115,18 +116,27 @@ public class SQLite extends SQLiteOpenHelper {
         return version;
     }
 
+    private int update13(int version, SQLiteDatabase db) throws Exception {
+        if(version==13) {
+            this.addColumnIfNotExists(db, "family", "alias", Types.VARCHAR, 5, "");
+            version++;
+        }
+        return version;
+    }
+
     public void insertOrUpdateFamily(Family family) throws Exception {
-        SQLiteStatement sqLiteStatement = this.getStatement(family, Arrays.asList("firstName", "lastName", "birthDate", "gender", "profilePicture", "color"));
+        SQLiteStatement sqLiteStatement = this.getStatement(family, Arrays.asList("firstName", "lastName", "alias", "birthDate", "gender", "profilePicture", "color"));
         sqLiteStatement.bindString(1, family.getFirstName());
         sqLiteStatement.bindString(2, family.getLastName());
-        sqLiteStatement.bindString(3, ConvertHelper.convertDateToString(family.getBirthDate(), Global.getDateFormat(this.context)));
-        sqLiteStatement.bindString(4, family.getGender());
+        sqLiteStatement.bindString(3, family.getAlias());
+        sqLiteStatement.bindString(4, ConvertHelper.convertDateToString(family.getBirthDate(), Global.getDateFormat(this.context)));
+        sqLiteStatement.bindString(5, family.getGender());
         if(family.getProfilePicture()!=null) {
-            sqLiteStatement.bindBlob(5, family.getProfilePicture());
+            sqLiteStatement.bindBlob(6, family.getProfilePicture());
         } else {
-            sqLiteStatement.bindNull(5);
+            sqLiteStatement.bindNull(6);
         }
-        sqLiteStatement.bindLong(6, family.getColor());
+        sqLiteStatement.bindLong(7, family.getColor());
         this.execute(sqLiteStatement, family);
         this.initSystemEvents(family);
     }
@@ -223,6 +233,7 @@ public class SQLite extends SQLiteOpenHelper {
             family.setID(cursor.getInt(cursor.getColumnIndex("ID")));
             family.setFirstName(cursor.getString(cursor.getColumnIndex("firstName")));
             family.setLastName(cursor.getString(cursor.getColumnIndex("lastName")));
+            family.setAlias(cursor.getString(cursor.getColumnIndex("alias")));
             family.setBirthDate(ConvertHelper.convertStringToDate(cursor.getString(cursor.getColumnIndex("birthDate")), Global.getDateFormat(this.context)));
             family.setGender(cursor.getString(cursor.getColumnIndex("gender")));
             family.setProfilePicture(cursor.getBlob(cursor.getColumnIndex("profilePicture")));

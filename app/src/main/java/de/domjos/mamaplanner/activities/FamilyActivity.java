@@ -56,7 +56,7 @@ public final class FamilyActivity extends AbstractActivity {
     private SwipeRefreshDeleteList lvFamily;
     private BottomNavigationView navigation;
 
-    private EditText txtFamilyFirstName, txtFamilyLastName, txtFamilyBirthDate;
+    private EditText txtFamilyFirstName, txtFamilyLastName, txtFamilyBirthDate, txtFamilyAlias;
     private TextView lblFamilyColor;
     private Button cmdFamilyColor;
     private Spinner spFamilyGender;
@@ -139,6 +139,7 @@ public final class FamilyActivity extends AbstractActivity {
         this.txtFamilyFirstName = this.findViewById(R.id.txtFamilyFirstName);
         this.txtFamilyLastName = this.findViewById(R.id.txtFamilyLastName);
         this.txtFamilyBirthDate = this.findViewById(R.id.txtFamilyBirthDate);
+        this.txtFamilyAlias = this.findViewById(R.id.txtFamilyAlias);
 
         this.lblFamilyColor = this.findViewById(R.id.lblFamilyColor);
         this.cmdFamilyColor = this.findViewById(R.id.cmdFamilyColor);
@@ -201,6 +202,7 @@ public final class FamilyActivity extends AbstractActivity {
         this.txtFamilyFirstName.setEnabled(editMode);
         this.txtFamilyLastName.setEnabled(editMode);
         this.txtFamilyBirthDate.setEnabled(editMode);
+        this.txtFamilyAlias.setEnabled(editMode);
         this.cmdFamilyColor.setEnabled(editMode);
         this.spFamilyGender.setEnabled(editMode);
         this.cmdFamilyCamera.setEnabled(editMode);
@@ -224,6 +226,7 @@ public final class FamilyActivity extends AbstractActivity {
         this.familyValidator = new Validator(FamilyActivity.this, R.mipmap.ic_launcher_round);
         this.familyValidator.addEmptyValidator(this.txtFamilyFirstName);
         this.familyValidator.addEmptyValidator(this.txtFamilyBirthDate);
+        this.familyValidator.addEmptyValidator(this.txtFamilyAlias);
         this.familyValidator.addDateValidator(this.txtFamilyBirthDate, Global.getDateFormat(getApplicationContext()).split(" ")[0]);
     }
 
@@ -272,6 +275,7 @@ public final class FamilyActivity extends AbstractActivity {
         try {
             this.txtFamilyFirstName.setText(this.currentFamily.getFirstName());
             this.txtFamilyLastName.setText(this.currentFamily.getLastName());
+            this.txtFamilyAlias.setText(this.currentFamily.getAlias());
             if(this.currentFamily.getBirthDate()!=null) {
                 this.txtFamilyBirthDate.setText(ConvertHelper.convertDateToString(this.currentFamily.getBirthDate(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
             } else {
@@ -312,6 +316,7 @@ public final class FamilyActivity extends AbstractActivity {
         try {
             this.currentFamily.setFirstName(this.txtFamilyFirstName.getText().toString());
             this.currentFamily.setLastName(this.txtFamilyLastName.getText().toString());
+            this.currentFamily.setAlias(this.txtFamilyAlias.getText().toString());
             if(!this.txtFamilyBirthDate.getText().toString().isEmpty()) {
                 this.currentFamily.setBirthDate(ConvertHelper.convertStringToDate(this.txtFamilyBirthDate.getText().toString(), Global.getDateFormat(getApplicationContext()).split(" ")[0]));
             }

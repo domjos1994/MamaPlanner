@@ -54,6 +54,7 @@
     <string name="app_family_all">All Family-Member</string>
     <string name="app_family_firstName">First-Name</string>
     <string name="app_family_lastName">Last-Name</string>
+    <string name="app_family_alias">Alias</string>
     <string name="app_family_birthDate">Birth-Date</string>
     <string name="app_family_gender">Gender</string>
     <string name="app_family_color">Color</string>
@@ -98,5 +99,5 @@
     <string name="validator_matches" formatted="false">Field \'%s\' contains invalid characters!</string>
     <string name="validator_noDate" formatted="false">Field \'%s\' does not contain a valid date!</string>
     <string name="validator_no_success">Fields are not valid!</string>
-    <string name="main_family_color">...</string>
+    <string name="main_family_color">…</string>
 </resources>

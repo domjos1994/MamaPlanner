@@ -70,22 +70,33 @@
                     android:layout_weight="5"/>
             </TableRow>
             <TableRow>
+
+                <EditText
+                    android:id="@+id/txtFamilyAlias"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="@string/app_family_alias"
+                    android:inputType="text"
+                    tools:ignore="TextFields" />
+
                 <EditText
                     android:id="@+id/txtFamilyBirthDate"
-                    android:hint="@string/app_family_birthDate"
-                    android:inputType="text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    tools:ignore="TextFields"/>
+                    android:hint="@string/app_family_birthDate"
+                    android:inputType="text"
+                    tools:ignore="TextFields" />
+
                 <Spinner
                     android:id="@+id/spFamilyGender"
-                    android:hint="@string/app_family_gender"
-                    android:inputType="textPersonName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:entries="@array/app_family_gender_items"/>
+                    android:layout_weight="2"
+                    android:entries="@array/app_family_gender_items"
+                    android:hint="@string/app_family_gender"
+                    android:inputType="textPersonName" />
             </TableRow>
 
             <TableRow

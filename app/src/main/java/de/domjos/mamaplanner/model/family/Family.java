@@ -26,6 +26,7 @@ public final class Family implements IDatabaseObject {
     private long ID, timeStamp;
     private String firstName;
     private String lastName;
+    private String alias;
     private Date birthDate;
     private String gender;
     private byte[] profilePicture;
@@ -38,6 +39,7 @@ public final class Family implements IDatabaseObject {
         this.timeStamp = 0L;
         this.firstName = "";
         this.lastName = "";
+        this.alias = "";
     }
 
     @Override
@@ -116,5 +118,13 @@ public final class Family implements IDatabaseObject {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public String getAlias() {
+        return this.alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }

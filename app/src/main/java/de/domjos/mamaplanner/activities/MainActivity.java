@@ -300,7 +300,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             for(Family family : MainActivity.GLOBAL.getSqLite().getFamily("")) {
                 this.familyArrayAdapter.add(family);
                 if(family.getColor() != -1 && family.getColor() != 0) {
-                    this.calApp.addGroup(family.getFirstName(), family.getColor());
+                    this.calApp.addGroup(family.getAlias(), family.getColor());
                 }
             }
             this.spAppHeaderFamily.setSelection(0);
