@@ -43,8 +43,8 @@ public class NotificationService extends IntentService {
                         calendarEvent.getCalendar().set(Calendar.HOUR_OF_DAY, eventHour);
                         todayEvents.add(calendarEvent);
                     }
+                    MainActivity.GLOBAL.getSqLite().deleteItem(notification);
                 }
-                MainActivity.GLOBAL.getSqLite().deleteItem(calendarEvent);
             }
 
             for(CalendarEvent todayEvent : todayEvents) {
