@@ -7,3 +7,4 @@
 .externalNativeBuild
 data
 release
+local.properties
