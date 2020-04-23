@@ -23,8 +23,10 @@ ext.androidVersion = 29
 ext.androidMinVersion = 20
 ext.androidBuildVersion = "29.0.2"
 
-ext.projectVersion = 14
-ext.projectName = "0.1.alpha.4"
+ext.projectVersion = 15
+ext.projectName = "0.1.alpha.5"
+
+ext.customWidgetsVersion = "3.3.3"
 
 ext.junitVersion = "4.12"
 ext.junitAndroidVersion = "1.3.0-alpha02"
@@ -36,7 +38,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.2'
+        classpath 'com.android.tools.build:gradle:3.6.3'
     }
 }
 
